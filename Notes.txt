@@ -1,0 +1,39 @@
+entity project {
+    id long,
+    name string,
+    owner string,
+    startDate date,
+    endDate date
+}
+
+entity team {
+    id long,
+    name string,
+    project project
+}
+
+entity user {
+    id long,
+    firstName string,
+    lastName string,
+    userId string,
+    teams Set<team>,
+    profilePic Blob
+}
+
+entity group / stage {
+    id long,
+    name string
+}
+
+entity task {
+    id long,
+    name string,
+    description string/clob,
+    priority integer,
+    category string (ref - group)
+}
+
+entity audit {
+    // to-do:
+}
