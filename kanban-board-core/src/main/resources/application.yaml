@@ -1,0 +1,11 @@
+# Server Config
+server:
+  port: 8080
+  http2:
+    enabled: true
+
+# Common properties
+common:
+  name: My Name
+  age: 28
+  isEnabled: true

@@ -22,7 +22,7 @@ public class Team extends BaseEntity {
     private Set<User> users = new HashSet<>();
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "team")
-    private Set<Task> tasks;
+    private Set<Task> tasks = new HashSet<>();
 
     public String getName() {
         return name;
@@ -38,5 +38,21 @@ public class Team extends BaseEntity {
 
     public void setProject(Project project) {
         this.project = project;
+    }
+
+    public Set<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(Set<User> users) {
+        this.users = users;
+    }
+
+    public Set<Task> getTasks() {
+        return tasks;
+    }
+
+    public void setTasks(Set<Task> tasks) {
+        this.tasks = tasks;
     }
 }

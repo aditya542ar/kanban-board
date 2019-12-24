@@ -31,4 +31,12 @@ public class Stage extends BaseEntity {
     public void setProject(Project project) {
         this.project = project;
     }
+
+    public Set<Task> getTasks() {
+        return tasks;
+    }
+
+    public void setTasks(Set<Task> tasks) {
+        this.tasks = tasks;
+    }
 }

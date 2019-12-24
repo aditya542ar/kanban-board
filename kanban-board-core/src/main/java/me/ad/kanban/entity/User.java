@@ -76,4 +76,12 @@ public class User extends BaseEntity {
     public void setProfilePic(byte[] profilePic) {
         this.profilePic = profilePic;
     }
+
+    public Set<Task> getTasks() {
+        return tasks;
+    }
+
+    public void setTasks(Set<Task> tasks) {
+        this.tasks = tasks;
+    }
 }

@@ -1,30 +1,13 @@
-package me.ad.kanban.entity;
+package me.ad.kanban.dto;
 
-import javax.persistence.*;
+public class TaskDto extends BaseDto {
 
-@Entity
-public class Task extends BaseEntity {
-
-    @Column(nullable = false)
     private String name;
-
-    @Lob
     private String description;
-
-    @Column(nullable = false)
     private int priority;
-
-    @ManyToOne
-    @JoinColumn(name = "stage_id")
-    private Stage category;
-
-    @ManyToOne
-    @JoinColumn(name = "team_id")
-    private Team team;
-
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    private StageDto category;
+    private TeamDto team;
+    private UserDto user;
 
     public String getName() {
         return name;
@@ -50,27 +33,27 @@ public class Task extends BaseEntity {
         this.priority = priority;
     }
 
-    public Stage getCategory() {
+    public StageDto getCategory() {
         return category;
     }
 
-    public void setCategory(Stage category) {
+    public void setCategory(StageDto category) {
         this.category = category;
     }
 
-    public Team getTeam() {
+    public TeamDto getTeam() {
         return team;
     }
 
-    public void setTeam(Team team) {
+    public void setTeam(TeamDto team) {
         this.team = team;
     }
 
-    public User getUser() {
+    public UserDto getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(UserDto user) {
         this.user = user;
     }
 }

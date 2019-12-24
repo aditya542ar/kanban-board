@@ -1,32 +1,18 @@
-package me.ad.kanban.entity;
+package me.ad.kanban.dto;
 
-import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity
-@Table(name = "Project")
-public class Project extends BaseEntity {
+public class ProjectDto extends BaseDto{
 
-    @Column(nullable = false, unique = true)
     private String name;
-
-    @Lob
     private String description;
-
-    @ManyToOne
-    @JoinColumn(name = "owner_id")
-    private User owner;
-
+    private UserDto owner;
     private LocalDate startDate;
     private LocalDate endDate;
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "project")
-    private Set<Team> teams = new HashSet<>();
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "project")
-    private Set<Stage> stages = new HashSet<>();
+    private Set<TeamDto> teams = new HashSet<>();
+    private Set<StageDto> stages = new HashSet<>();
 
     public String getName() {
         return name;
@@ -44,11 +30,11 @@ public class Project extends BaseEntity {
         this.description = description;
     }
 
-    public User getOwner() {
+    public UserDto getOwner() {
         return owner;
     }
 
-    public void setOwner(User owner) {
+    public void setOwner(UserDto owner) {
         this.owner = owner;
     }
 
@@ -68,19 +54,19 @@ public class Project extends BaseEntity {
         this.endDate = endDate;
     }
 
-    public Set<Team> getTeams() {
+    public Set<TeamDto> getTeams() {
         return teams;
     }
 
-    public void setTeams(Set<Team> teams) {
+    public void setTeams(Set<TeamDto> teams) {
         this.teams = teams;
     }
 
-    public Set<Stage> getStages() {
+    public Set<StageDto> getStages() {
         return stages;
     }
 
-    public void setStages(Set<Stage> stages) {
+    public void setStages(Set<StageDto> stages) {
         this.stages = stages;
     }
 }
