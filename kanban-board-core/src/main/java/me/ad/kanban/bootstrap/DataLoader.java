@@ -2,7 +2,6 @@ package me.ad.kanban.bootstrap;
 
 import me.ad.kanban.entity.*;
 import me.ad.kanban.repository.*;
-import me.ad.kanban.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

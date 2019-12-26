@@ -7,6 +7,8 @@ public class CustomMessageProperties {
     private String projectNotExist;
     private String userNotExist;
     private String teamNotExist;
+    private String stageNotExist;
+    private String taskNotExist;
     private String invalidLikeFilterCriteria;
     private String invalidDateFilterCriteria;
     private String missingSortOrder;
@@ -37,6 +39,22 @@ public class CustomMessageProperties {
 
     public void setTeamNotExist(String teamNotExist) {
         this.teamNotExist = teamNotExist;
+    }
+
+    public String getStageNotExist() {
+        return stageNotExist;
+    }
+
+    public void setStageNotExist(String stageNotExist) {
+        this.stageNotExist = stageNotExist;
+    }
+
+    public String getTaskNotExist() {
+        return taskNotExist;
+    }
+
+    public void setTaskNotExist(String taskNotExist) {
+        this.taskNotExist = taskNotExist;
     }
 
     public String getInvalidLikeFilterCriteria() {
@@ -101,6 +119,8 @@ public class CustomMessageProperties {
         sb.append("projectNotExist='").append(projectNotExist).append('\'');
         sb.append(", userNotExist='").append(userNotExist).append('\'');
         sb.append(", teamNotExist='").append(teamNotExist).append('\'');
+        sb.append(", stageNotExist='").append(stageNotExist).append('\'');
+        sb.append(", taskNotExist='").append(taskNotExist).append('\'');
         sb.append(", invalidLikeFilterCriteria='").append(invalidLikeFilterCriteria).append('\'');
         sb.append(", invalidDateFilterCriteria='").append(invalidDateFilterCriteria).append('\'');
         sb.append(", missingSortOrder='").append(missingSortOrder).append('\'');
