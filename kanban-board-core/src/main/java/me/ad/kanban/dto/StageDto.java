@@ -5,8 +5,7 @@ import java.util.Set;
 public class StageDto extends BaseDto {
 
     private String name;
-    private ProjectDto project;
-    private Set<TaskDto> tasks;
+    private String projectId;
 
     public String getName() {
         return name;
@@ -16,19 +15,11 @@ public class StageDto extends BaseDto {
         this.name = name;
     }
 
-    public ProjectDto getProject() {
-        return project;
+    public String getProjectId() {
+        return projectId;
     }
 
-    public void setProject(ProjectDto project) {
-        this.project = project;
-    }
-
-    public Set<TaskDto> getTasks() {
-        return tasks;
-    }
-
-    public void setTasks(Set<TaskDto> tasks) {
-        this.tasks = tasks;
+    public void setProjectId(String projectId) {
+        this.projectId = projectId;
     }
 }

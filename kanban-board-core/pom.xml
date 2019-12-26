@@ -40,8 +40,8 @@
                                     <type>jar</type>
                                     <overWrite>true</overWrite>
                                     <outputDirectory>${project.build.outputDirectory}/static</outputDirectory>
-                                    <includes>kanban-board-ui/**</includes>
-                                    <!--<excludes>**/user*.css</excludes>-->
+                                    <includes>**/*</includes>
+                                    <!--<excludes>**/kanban-board-ui/</excludes>-->
                                 </artifactItem>
                             </artifactItems>
                         </configuration>

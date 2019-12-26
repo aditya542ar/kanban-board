@@ -8,11 +8,9 @@ public class ProjectDto extends BaseDto{
 
     private String name;
     private String description;
-    private UserDto owner;
+    private String ownerId;
     private LocalDate startDate;
     private LocalDate endDate;
-    private Set<TeamDto> teams = new HashSet<>();
-    private Set<StageDto> stages = new HashSet<>();
 
     public String getName() {
         return name;
@@ -30,12 +28,12 @@ public class ProjectDto extends BaseDto{
         this.description = description;
     }
 
-    public UserDto getOwner() {
-        return owner;
+    public String getOwnerId() {
+        return ownerId;
     }
 
-    public void setOwner(UserDto owner) {
-        this.owner = owner;
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
     }
 
     public LocalDate getStartDate() {
@@ -52,21 +50,5 @@ public class ProjectDto extends BaseDto{
 
     public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
-    }
-
-    public Set<TeamDto> getTeams() {
-        return teams;
-    }
-
-    public void setTeams(Set<TeamDto> teams) {
-        this.teams = teams;
-    }
-
-    public Set<StageDto> getStages() {
-        return stages;
-    }
-
-    public void setStages(Set<StageDto> stages) {
-        this.stages = stages;
     }
 }

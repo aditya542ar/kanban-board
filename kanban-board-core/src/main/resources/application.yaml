@@ -3,9 +3,39 @@ server:
   port: 8080
   http2:
     enabled: true
+  servlet:
+    contextPath: /kanban/
 
-# Common properties
-common:
-  name: My Name
-  age: 28
-  isEnabled: true
+# Spring Properties
+spring:
+  application:
+    name: kanban
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        format_sql: true
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  datasource:
+    url: "jdbc:h2:mem:kanban-db;DB_CLOSE_ON_EXIT=false"
+    username: admin
+    password: admin123
+    driverClassName: org.h2.Driver
+
+# messages
+message:
+  projectNotExist: "Project with ID: ''{0}'' doesn''t exist."
+  userNotExist: "User with ID: ''{0}'' doesn''t exist."
+  teamNotExist: "Team with ID: ''{0}'' doesn''t exist."
+  invalidLikeFilterCriteria: "''Like'' filter criteria with param ''{0}'' should contains ''%''"
+  invalidDateFilterCriteria: "''Date'' filter criteria with param ''{0}'' should be in YYYY-MM-DD format"
+  missingSortOrder: "sortOrder must be used along with sortBy"
+  missingSortBy: "sortBy must be used along with sortOrder"
+  invalidSortOrder: "Invalid sortOrder ''{0}'', use any one of {1}"
+  invalidSortBy: "Invalid sortBy ''{0}'', use any one of {1}"
+  invalidIdentifier: "Invalid Identifier passed!"

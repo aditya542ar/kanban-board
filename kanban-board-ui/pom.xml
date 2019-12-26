@@ -62,7 +62,7 @@
     </plugins>
     <resources>
       <resource>
-        <directory>dist</directory>
+        <directory>dist/kanban-board-ui</directory>
       </resource>
     </resources>
   </build>
