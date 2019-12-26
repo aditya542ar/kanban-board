@@ -26,38 +26,4 @@ public class StageServiceImpl implements StageService {
         this.stageRepository = stageRepository;
     }
 
-    //@Override
-    public Long findTotalCount() {
-        return stageRepository.count();
-    }
-
-    @Override
-    public List<Stage> findAll() {
-        return stageRepository.findAll();
-    }
-
-    @Override
-    public Optional<Stage> findById(String id) {
-        return stageRepository.findById(id);
-    }
-
-    @Override
-    public Stage save(Stage entity) {
-        return stageRepository.save(entity);
-    }
-
-    @Override
-    public void delete(Stage entity) {
-        stageRepository.delete(entity);
-    }
-
-    @Override
-    public void deleteById(String id) {
-        stageRepository.deleteById(id);
-    }
-
-    @Override
-    public FilterBuilder<Stage> filterBuilder() {
-        return new FilterBuilder<>(message);
-    }
 }

@@ -26,39 +26,4 @@ public class TaskServiceImpl implements TaskService {
         this.mapperService = mapperService;
         this.taskRepository = taskRepository;
     }
-
-    //@Override
-    public Long findTotalCount() {
-        return taskRepository.count();
-    }
-
-    @Override
-    public List<Task> findAll() {
-        return taskRepository.findAll();
-    }
-
-    @Override
-    public Optional<Task> findById(String id) {
-        return taskRepository.findById(id);
-    }
-
-    @Override
-    public Task save(Task entity) {
-        return taskRepository.save(entity);
-    }
-
-    @Override
-    public void delete(Task entity) {
-        taskRepository.delete(entity);
-    }
-
-    @Override
-    public void deleteById(String id) {
-        taskRepository.deleteById(id);
-    }
-
-    @Override
-    public FilterBuilder<Task> filterBuilder() {
-        return new FilterBuilder<>(message);
-    }
 }
