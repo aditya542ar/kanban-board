@@ -34,4 +34,14 @@ public interface TeamRepository extends JpaRepository<Team, String>, JpaSpecific
     static Specification<Team> nameLikeSpec(String nameLike) {
         return (teamRoot, cq, cb) -> cb.like(teamRoot.get("name"), nameLike);
     }
+    static Specification<Team> projectIdSpec(String id) {
+        return (teamRoot, cq, cb) -> cb.equal(teamRoot.get("project").get("id"), id);
+    }
+    static Specification<Team> projectIdInSpec(List<String> idList) {
+        return (teamRoot, cq, cb) -> {
+            CriteriaBuilder.In<String> in = cb.in(teamRoot.get("project").get("id"));
+            idList.forEach(in::value);
+            return in;
+        };
+    }
 }

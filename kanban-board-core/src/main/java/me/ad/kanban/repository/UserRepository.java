@@ -43,4 +43,7 @@ public interface UserRepository extends JpaRepository<User, String>, JpaSpecific
             return in;
         };
     }
+    static Specification<User> userIdLikeSpec(String userIdLike) {
+        return (userRoot, cq, cb) -> cb.like(userRoot.get("userId"), userIdLike);
+    }
 }

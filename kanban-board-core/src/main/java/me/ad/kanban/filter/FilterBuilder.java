@@ -47,14 +47,14 @@ public class FilterBuilder<T> {
 
     public FilterBuilder<T> addEqualFilter(String filterName, Optional<Object> filterOpt, Specification<T> spec) {
         filterOpt.ifPresent((filter) -> {
-            specification = specification.and(spec);
+            addSpec(spec);
         });
         return this;
     }
 
     public FilterBuilder<T> addInFilter(String filterName, Optional<List<? extends Object>> filterOpt, Specification<T> spec) {
         filterOpt.ifPresent((filter) -> {
-            specification = specification.and(spec);
+            addSpec(spec);
         });
         return this;
     }
@@ -65,7 +65,7 @@ public class FilterBuilder<T> {
                 throw new IllegalArgumentException(
                         MessageFormat.format(message.getInvalidLikeFilterCriteria(), filterName));
             } else {
-                specification = specification.and(spec);
+                addSpec(spec);
             }
         });
         return this;
@@ -75,7 +75,7 @@ public class FilterBuilder<T> {
         dateOpt.ifPresent((date) -> {
             try {
                 LocalDate d = LocalDate.parse(date, DateTimeFormatter.ISO_LOCAL_DATE);
-                specification = specification.and(spec);
+                addSpec(spec);
             } catch (DateTimeParseException e) {
                 throw new IllegalArgumentException(
                         MessageFormat.format(message.getInvalidDateFilterCriteria(), filterName));
@@ -106,6 +106,14 @@ public class FilterBuilder<T> {
             sort = Sort.by(Sort.Direction.fromString(sortOrderOpt.get()), sortByOpt.get());
         }
         return this;
+    }
+
+    private void addSpec(Specification<T> spec) {
+        if(isOR) {
+            specification = specification.or(spec);
+        } else {
+            specification = specification.and(spec);
+        }
     }
 
 }

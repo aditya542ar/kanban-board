@@ -145,6 +145,23 @@ public class UserServiceImpl implements UserService {
         userRepository.deleteAll();
     }
 
+    @Override
+    public List<UserDto> searchByUserIdOrName(UserGetAllQueryDto queryDto) {
+        UserGetAllQueryDto qd = new UserGetAllQueryDto();
+        if(queryDto.getUserIdLike() != null || queryDto.getFirstNameLike() != null
+            || queryDto.getLastNameLike() != null) {
+            qd.setUserIdLike(queryDto.getUserIdLike());
+            qd.setFirstNameLike(queryDto.getFirstNameLike());
+            qd.setLastNameLike(queryDto.getLastNameLike());
+            FilterBuilder<User> filterBuilder = applySearchByUserIdOrNameFilterQuery(qd);
+            return userRepository.findAll(filterBuilder.getSpecification())
+                    .stream().map(mapperService::mapUserToDto)
+                    .collect(Collectors.toList());
+        } else {
+            return new ArrayList<>();
+        }
+    }
+
     private FilterBuilder<User> applyFilterQuery(UserGetAllQueryDto qd) {
         FilterBuilder<User> filterBuilder = filterBuilderObjectFactory.getObject();
         filterBuilder
@@ -156,8 +173,20 @@ public class UserServiceImpl implements UserService {
                 .addLikeFilter("lastNameLike", Optional.ofNullable(qd.getLastNameLike()), lastNameLikeSpec(qd.getLastNameLike()))
                 .addEqualFilter("userId", Optional.ofNullable(qd.getUserId()), userIdSpec(qd.getUserId()))
                 .addInFilter("userIdIn", Optional.ofNullable(qd.getUserIdIn()), userIdInSpec(qd.getUserIdIn()))
+                .addLikeFilter("userIdLike", Optional.ofNullable(qd.getUserIdLike()), userIdLikeSpec(qd.getUserIdLike()))
                 .addSortByAndSortOrder(Optional.ofNullable(qd.getSortBy()), Optional.ofNullable(qd.getSortOrder()),
                         SORT_BY_SET, SORT_ORDER_SET);
+        return filterBuilder;
+    }
+
+    private FilterBuilder<User> applySearchByUserIdOrNameFilterQuery(UserGetAllQueryDto qd) {
+        FilterBuilder<User> filterBuilder = filterBuilderObjectFactory.getObject();
+        filterBuilder
+                .orStart()
+                .addLikeFilter("userIdLike", Optional.ofNullable(qd.getUserIdLike()), userIdLikeSpec(qd.getUserIdLike()))
+                .addLikeFilter("firstNameLike", Optional.ofNullable(qd.getFirstNameLike()), firstNameLikeSpec(qd.getFirstNameLike()))
+                .addLikeFilter("lastNameLike", Optional.ofNullable(qd.getLastNameLike()), lastNameLikeSpec(qd.getLastNameLike()))
+                .orEnd();
         return filterBuilder;
     }
 }

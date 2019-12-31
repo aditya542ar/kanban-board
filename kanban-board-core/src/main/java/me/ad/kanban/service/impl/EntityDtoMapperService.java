@@ -144,7 +144,9 @@ public class EntityDtoMapperService implements MapperService {
         dto.setFirstName(user.getFirstName());
         dto.setLastName(user.getLastName());
         dto.setUserId(user.getUserId());
-        dto.setProfilePic(user.getProfilePic());
+        Optional.ofNullable(user.getProfilePic()).ifPresent(
+                (pic) -> dto.setProfilePic(new String(pic))
+        );
         return dto;
     }
 
@@ -156,7 +158,9 @@ public class EntityDtoMapperService implements MapperService {
         user.setUserId(dto.getUserId());
         user.setFirstName(dto.getFirstName());
         user.setLastName(dto.getLastName());
-        user.setProfilePic(dto.getProfilePic());
+        Optional.ofNullable(dto.getProfilePic()).ifPresent(
+                (pic) -> user.setProfilePic(pic.getBytes())
+        );
         return user;
     }
 }

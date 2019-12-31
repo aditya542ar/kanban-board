@@ -34,4 +34,14 @@ public interface StageRepository extends JpaRepository<Stage, String>, JpaSpecif
     static Specification<Stage> nameLikeSpec(String nameLike) {
         return (root, cq, cb) -> cb.like(root.get("name"), nameLike);
     }
+    static Specification<Stage> projectIdSpec(String name) {
+        return (root, cq, cb) -> cb.equal(root.get("project").get("id"), name);
+    }
+    static Specification<Stage> projectIdInSpec(List<String> idList) {
+        return (root, cq, cb) -> {
+            CriteriaBuilder.In<String> in = cb.in(root.get("project").get("id"));
+            idList.forEach(in::value);
+            return in;
+        };
+    }
 }

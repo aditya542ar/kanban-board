@@ -22,4 +22,5 @@ public interface UserService {
     void deleteUserById(String id);
     void deleteUsers(List<String> idList);
     void deleteAllUsers();
+    List<UserDto> searchByUserIdOrName(UserGetAllQueryDto queryDto);
 }

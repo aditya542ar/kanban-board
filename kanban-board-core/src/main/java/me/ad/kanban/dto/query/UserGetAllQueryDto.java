@@ -10,6 +10,7 @@ public class UserGetAllQueryDto {
     private String lastName;
     private String lastNameLike;
     private String userId;
+    private String userIdLike;
     private List<String> userIdIn;
     private String sortBy;
     private String sortOrder;
@@ -68,6 +69,14 @@ public class UserGetAllQueryDto {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getUserIdLike() {
+        return userIdLike;
+    }
+
+    public void setUserIdLike(String userIdLike) {
+        this.userIdLike = userIdLike;
     }
 
     public List<String> getUserIdIn() {

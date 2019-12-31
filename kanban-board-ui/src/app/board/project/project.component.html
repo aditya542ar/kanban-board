@@ -1,0 +1,688 @@
+<div class="h1 mb-4" *ngIf="showProject"> 
+  <div>
+    <i class="fa fa-info-circle"></i> 
+    <span *ngIf="!edit.isName"> Details of 
+      <span [ngClass]="{'dummyBox box': edit.isSaving && edit.currProp == 'name'}">
+        {{projectData.name}}
+      </span>
+    </span>
+    <span *ngIf="edit.isName">
+      Rename {{projectData.name}}
+      <input type="text" class="form-control" name="newName" [(ngModel)]="projectData.newName"
+        
+      />
+    </span>
+    <a href="javascript:void(0);" class="badge badge-outline-primary mt-1 text-left"
+      title="Rename Project"
+      *ngIf="!edit.isName && !edit.isSaving"
+      (click)="startEdit('name')">
+      <i class="fa fa-edit"></i>
+    </a>
+  </div>
+  
+  
+  <button class="btn btn-sm btn-outline-danger ml-2"
+    style="display:inline-block;"
+    *ngIf="edit.isName"
+    title="Save"
+    (click)="saveEdit('name')">Ok
+  </button>
+  <button class="btn btn-sm btn-outline-success ml-2"
+    style="display:inline-block;"
+    *ngIf="edit.isName"
+    title="Cancel"
+    (click)="cancelEdit('name')">Cancel
+  </button>
+</div>
+<div class="row" *ngIf="showProject">
+  <div class="col-md-7">
+    <div class="card mb-3 pb-1" [ngClass]="{'dummyBox': edit.currProp == 'description' && edit.isSaving}">
+      <div class="card-header p-1 pl-1">
+        <strong>Description</strong>
+        <div class="text-right float-right">
+          <button class="btn btn-sm btn-outline-primary ml-2"
+            title="Edit Description"
+            *ngIf="!edit.isDescription && !edit.isSaving"
+            (click)="startEdit('description')">
+            <i class="fa fa-edit"></i> Edit
+          </button>
+          <button class="btn btn-sm btn-outline-danger ml-2"
+            *ngIf="edit.isDescription"
+            title="Save"
+            (click)="saveEdit('description')">Ok
+          </button>
+          <button class="btn btn-sm btn-outline-success ml-2"
+            *ngIf="edit.isDescription"
+            title="Cancel"
+            (click)="cancelEdit('description')">Cancel
+          </button>
+        </div>
+      </div>
+      <div class="card-body px-2 py-1" *ngIf="!edit.isDescription">
+        <p class="card-text mb-2 box px-2">
+          <small>{{projectData.description}}</small>
+        </p>
+      </div>
+      <div class="card-body px-2 py-1" *ngIf="edit.isDescription">
+        <div class="form-group">
+          <textarea class="form-control" rows="5" name="newDescription"
+          [(ngModel)]="projectData.newDescription"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <div class="input-group mb-2">
+          <div class="input-group-prepend">
+            <span class="input-group-text border border-success" [ngClass]="{'dummyBox box': edit.currProp == 'startDate' && edit.isSaving}">
+              <strong>Start Date</strong>
+            </span>
+          </div>
+          <span class="form-control border border-success" [ngClass]="{'dummyBox box': edit.currProp == 'startDate' && edit.isSaving}">
+            <span *ngIf="!edit.isStartDate">
+              {{projectData.startDate ? projectData.startDate : "-NA-"}}
+            </span>
+            <input type="date" name="newStartDate" [(ngModel)]="projectData.newStartDate"
+            style="border-width: 0;"
+            title="Edit Start Date"
+            *ngIf="edit.isStartDate" />
+            <a href="javascript:void(0);" class="badge badge-outline-primary mt-1 float-right"
+              title="Edit Start Date"
+              *ngIf="!edit.isStartDate && !edit.isSaving"
+              (click)="startEdit('startDate')">
+              <i class="fa fa-edit"></i>
+            </a>
+            <a href="javascript:void(0);" class="badge badge-outline-primary mt-1 float-right"
+              title="Save"
+              style="color: red;"
+              *ngIf="edit.isStartDate"
+              (click)="saveEdit('startDate')">
+              <i class="fa fa-check"></i>
+            </a>
+            <a href="javascript:void(0);" class="badge badge-outline-primary mt-1 float-right"
+              title="Cancel"
+              style="color: green;"
+              *ngIf="edit.isStartDate"
+              (click)="cancelEdit('startDate')">
+              <i class="fa fa-times"></i>
+            </a>
+          </span>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text border border-danger" [ngClass]="{'dummyBox box': edit.currProp == 'endDate' && edit.isSaving}">
+              <strong>End Date</strong>
+            </span>
+          </div>
+          <span class="form-control border border-danger" [ngClass]="{'dummyBox box': edit.currProp == 'endDate' && edit.isSaving}">
+            <span *ngIf="!edit.isEndDate">
+              {{projectData.endDate ? projectData.endDate : "-NA-"}}
+            </span>
+            <input type="date" name="newEndDate" [(ngModel)]="projectData.newEndDate"
+              style="border-width: 0;"
+              title="Edit End Date"
+              *ngIf="edit.isEndDate" />
+            <a href="javascript:void(0);" class="badge badge-outline-primary mt-1 float-right"
+                title="Edit End Date"
+                *ngIf="!edit.isEndDate && !edit.isSaving"
+                (click)="startEdit('endDate')">
+                <i class="fa fa-edit"></i>
+            </a>
+            <a href="javascript:void(0);" class="badge badge-outline-primary mt-1 float-right"
+              title="Save"
+              style="color: red;"
+              *ngIf="edit.isEndDate"
+              (click)="saveEdit('endDate')">
+              <i class="fa fa-check"></i>
+            </a>
+            <a href="javascript:void(0);" class="badge badge-outline-primary mt-1 float-right"
+              title="Cancel"
+              style="color: green;"
+              *ngIf="edit.isEndDate"
+              (click)="cancelEdit('endDate')">
+              <i class="fa fa-times"></i>
+            </a>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="card mb-3 pb-1" [ngClass]="{'dummyBox box': edit.currProp == 'ownerId' && edit.isSaving}">
+      <div class="card-header p-1 pl-1">
+        <strong>Owner Details</strong>
+        <div class="text-right float-right">
+          <button class="btn btn-sm btn-outline-primary ml-2"
+            title="Update Owner"
+            *ngIf="!edit.isOwnerId && !edit.isSaving"
+            (click)="startEdit('ownerId')">
+            <i class="fa fa-edit"></i> Edit
+          </button>
+          <button class="btn btn-sm btn-outline-success ml-2 float-right"
+            title="Cancel"
+            *ngIf="edit.isOwnerId"
+            (click)="cancelEdit('ownerId')">
+            <i class="fa fa-times"></i> Cancel
+          </button>
+        </div>
+      </div>
+      <div class="card-body px-2 py-1">
+        <div class="float-left">
+          <img src="{{projectOwner.profilePic}}" class="rounded float-left img-thumbnail profile-pic" 
+          alt="Profile Pic of {{projectOwner.userId}}" />
+        </div>
+        <div class="float-left ml-3" style="width: calc(100% - 140px);">
+          <div class="input-group mb-2">
+            <div class="input-group-prepend" *ngIf="!edit.isOwnerId">
+              <span class="input-group-text">User ID</span>
+            </div>
+            <span class="form-control" *ngIf="!edit.isOwnerId">{{projectOwner.userId}}</span>
+            <input type="text" class="form-control" name="newOwnerId" [(ngModel)]="newOwnerId"
+            style="width: 100%; min-width: 100%; max-width: 100%;"
+            title="Edit Owner"
+            placeholder="Start typing userId or Name ..."
+            (keyup)="searchUser(newOwnerId)"
+            *ngIf="edit.isOwnerId" />
+            <ul class="list-group searchUserDropDown" *ngIf="edit.isOwnerId">
+              <li class="list-group-item" *ngFor="let user of searchUsers"
+                style="cursor: pointer;"
+                (click)="setOwner(user)">
+                {{user.userId + " - (" }} {{ user.lastName ? user.lastName + "," : "" }}
+                {{ user.firstName + " )" }}
+              </li>
+            </ul>
+          </div>
+          <div class="input-group" *ngIf="!edit.isOwnerId">
+            <div class="input-group-prepend">
+              <span class="input-group-text">Name &nbsp;</span>
+            </div>
+            <span class="form-control">
+              {{projectOwner.lastName ? projectOwner.lastName + ", " : ""}} {{ projectOwner.firstName }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card mb-3 pb-1">
+      <div class="card-header p-1 pl-1">
+        <strong>Tasks Summary</strong>
+      </div>
+      <div class="card-body px-2 py-1">
+        <div class="row">
+          <div class="col-md-12 mb-3 mt-2">
+            <div class="input-group" >
+              <div class="input-group-prepend">
+                <span class="input-group-text">
+                  <strong>Total Task Count</strong>
+                </span>
+              </div>
+              <span class="form-control"><strong>#{{projectTotalTaskCount}}</strong></span>
+            </div>
+          </div>
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-header p-1 pl-1">
+              <strong>Stage wise Task Count</strong>
+            </div>
+            <div class="card-body px-0 py-0">
+              <ul class="list-group">
+                <li class="list-group-item" *ngFor="let stage of projectStages">
+                  {{stage.name}}
+                  <span class="badge badge-info float-right">#{{stage.taskCount}}</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-header p-1 pl-1">
+              <strong>Team wise Task Count</strong>
+            </div>
+            <div class="card-body px-0 py-0">
+              <ul class="list-group">
+                <li class="list-group-item" *ngFor="let team of projectTeams">
+                  {{team.name}}
+                  <span class="badge badge-info float-right">#{{team.taskCount}}</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-5">
+    <div class="card mb-3">
+      <div class="card-header p-1 pl-1">
+        <strong>Stages</strong>
+        <div class="text-right float-right">
+          <button class="btn btn-sm btn-outline-primary ml-2"
+            (click)="startAddStage()"
+            *ngIf="!(isAddStage || isAddingStage || isRenameStage || isRemovingStage || isRenamingStage || isRenameStage)"
+            title="Add new stage">
+            <i class="fa fa-plus-square"></i> Add
+          </button>
+        </div>
+      </div>
+      <div class="card-body px-0 py-0">
+        <ul class="list-group">
+          <li class="list-group-item" *ngFor="let stage of projectStages; index as i" 
+          [ngClass]="{'dummyBox box': (isRemovingStage || isRenamingStage) && currStage.id == stage.id}">
+            <div *ngIf="!(isRenameStage && currStage.index == i)">
+              <span>{{stage.name}}</span>
+              <span *ngIf="!(isAddStage || isAddingStage || isRenameStage || isRenamingStage || isRemovingStage)">
+                <a href="javascript:void(0);" class="badge badge-ouline-danger mt-1 ml-2 float-right"
+                  style="color: red;" title="Delate Stage"
+                  *ngIf="!isRemovingStage"
+                  (click)="removeStage(stage, i)">
+                  <i class="fa fa-trash"></i>
+                </a>
+                <a href="javascript:void(0);" class="badge badge-outline-primary mt-1 float-right"
+                    title="Rename Stage"
+                    *ngIf="!isRemovingStage"
+                    (click)="startRenameStage(stage, i)">
+                  <i class="fa fa-edit"></i>
+                </a>
+              </span>
+            </div>
+            <div *ngIf="isRenameStage && currStage.index == i">
+              <input type="text" [(ngModel)]="newStage" name="newStage" class="form-control" />
+              <a href="javascript:void(0);" class="badge badge-outline-danger mt-1 ml-2 float-right"
+                  title="Save"
+                  style="color: red;"
+                  *ngIf="isRenameStage"
+                  (click)="saveRenameStage(newStage)">
+                <i class="fa fa-check"></i>
+              </a>
+              <a href="javascript:void(0);" class="badge badge-outline-success mt-1 float-right"
+                  title="Cancel"
+                  style="color: green;"
+                  *ngIf="isRenameStage"
+                  (click)="cancelRenameStage()">
+                <i class="fa fa-times"></i>
+              </a>
+            </div>
+          </li>
+          <li class="list-group-item" *ngIf="isAddStage" [ngClass]="{'dummyBox box no-pointer': isAddingStage}">
+            <input type="text" class="form-control" name="newStage" [(ngModel)]="newStage"
+            title="Add new stage" />
+            <a href="javascript:void(0);" class="badge badge-outline-danger mt-1 ml-2 float-right"
+                title="Save"
+                style="color: red;"
+                *ngIf="!isAddingStage"
+                (click)="saveStage(newStage)">
+              <i class="fa fa-check"></i>
+            </a>
+            <a href="javascript:void(0);" class="badge badge-outline-success mt-1 float-right"
+                title="Cancel"
+                style="color: green;"
+                *ngIf="!isAddingStage"
+                (click)="cancelAddStage()">
+              <i class="fa fa-times"></i>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="card mb-3">
+      <div class="card-header p-1 pl-1">
+        <strong>Teams</strong>
+        <div class="text-right float-right">
+          <button class="btn btn-sm btn-outline-primary ml-2"
+            (click)="startAddTeam()"
+            *ngIf="!(isAddTeam || isAddingTeam || isRenameTeam || isRemovingTeam || isRenamingTeam || isRenameTeam)"
+            title="Add new team">
+            <i class="fa fa-plus-square"></i> Add
+          </button>
+        </div>
+      </div>
+      <div class="card-body px-0 py-0">
+        <ul class="list-group">
+          <li class="list-group-item" *ngFor="let team of projectTeams; index as i" 
+          [ngClass]="{'dummyBox box': (isRemovingTeam || isRenamingTeam) && currTeam.id == team.id}">
+            <div *ngIf="!(isRenameTeam && currTeam.index == i)">
+              <span>{{team.name}}</span>
+              <span *ngIf="!(isAddTeam || isAddingTeam || isRenameTeam || isRenamingTeam || isRemovingTeam)">
+                <a href="javascript:void(0);" class="badge badge-ouline-danger mt-1 ml-2 float-right"
+                  style="color: red;" title="Delate Team"
+                  *ngIf="!isRemovingTeam"
+                  (click)="removeTeam(team, i)">
+                  <i class="fa fa-trash"></i>
+                </a>
+                <a href="javascript:void(0);" class="badge badge-outline-primary mt-1 float-right"
+                    title="Rename Team"
+                    *ngIf="!isRemovingTeam"
+                    (click)="startRenameTeam(team, i)">
+                  <i class="fa fa-edit"></i>
+                </a>
+              </span>
+            </div>
+            <div *ngIf="isRenameTeam && currTeam.index == i">
+              <input type="text" [(ngModel)]="newTeam" name="newTeam" class="form-control" />
+              <a href="javascript:void(0);" class="badge badge-outline-danger mt-1 ml-2 float-right"
+                  title="Save"
+                  style="color: red;"
+                  *ngIf="isRenameTeam"
+                  (click)="saveRenameTeam(newTeam)">
+                <i class="fa fa-check"></i>
+              </a>
+              <a href="javascript:void(0);" class="badge badge-outline-success mt-1 float-right"
+                  title="Cancel"
+                  style="color: green;"
+                  *ngIf="isRenameTeam"
+                  (click)="cancelRenameTeam()">
+                <i class="fa fa-times"></i>
+              </a>
+            </div>
+          </li>
+          <li class="list-group-item" *ngIf="isAddTeam" [ngClass]="{'dummyBox box no-pointer': isAddingTeam}">
+            <input type="text" class="form-control" name="newTeam" [(ngModel)]="newTeam"
+            title="Add new team" />
+            <a href="javascript:void(0);" class="badge badge-outline-danger mt-1 ml-2 float-right"
+                title="Save"
+                style="color: red;"
+                *ngIf="!isAddingTeam"
+                (click)="saveTeam(newTeam)">
+              <i class="fa fa-check"></i>
+            </a>
+            <a href="javascript:void(0);" class="badge badge-outline-success mt-1 float-right"
+                title="Cancel"
+                style="color: green;"
+                *ngIf="!isAddingTeam"
+                (click)="cancelAddTeam()">
+              <i class="fa fa-times"></i>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal shadow -->
+<div class="modalShadow" *ngIf="modal.isShow" [style.display]="modal.isShow ? 'block' : 'none'"></div>
+
+<!-- The Modal -->
+<div class="modal" name="myModal" *ngIf="modal.isShow" [style.display]="modal.isShow ? 'block' : 'none'">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">{{modal.header}}</h4>
+        <!-- <button type="button" class="close" 
+        data-dismiss="modal"
+        (click)="hideModal(modal)">&times;</button> -->
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        {{modal.body}}
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer p-0">
+        <button type="button" class="btn btn-danger" 
+        data-dismiss="modal"
+        (click)="hideModal(modal)">Close</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Loading box -->
+<div class="row no-pointer dummyBox" *ngIf="!showProject">
+  <div class="col-md-7">
+    <div class="card mb-3 pb-1">
+      <div class="card-header p-1 pl-1">
+        <strong class="box">
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        </strong>
+        <div class="text-right float-right">
+          <button class="btn btn-sm btn-outline-primary ml-2 box"
+            title="Edit Description">
+            <i class="fa fa-edit"></i> &nbsp;&nbsp;&nbsp;&nbsp;
+          </button>
+        </div>
+      </div>
+      <div class="card-body px-2 py-1">
+        <p class="card-text mb-2 box px-2">
+          <small>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          </small>
+        </p>
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <div class="input-group mb-2">
+          <div class="input-group-prepend">
+            <span class="input-group-text border border-success box">
+              <strong>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              </strong>
+            </span>
+          </div>
+          <span class="form-control border border-success box">
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <a href="javascript:void(0);" class="badge badge-outline-primary mt-1 float-right"
+              title="Edit Start Date">
+              <i class="fa fa-edit"></i>
+            </a>
+          </span>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text border border-danger box">
+              <strong>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              </strong>
+            </span>
+          </div>
+          <span class="form-control border border-danger box">
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <a href="javascript:void(0);" class="badge badge-outline-primary mt-1 float-right"
+                title="Edit End Date">
+              <i class="fa fa-edit"></i>
+            </a>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="card mb-3 pb-1">
+      <div class="card-header p-1 pl-1">
+        <strong class="box">
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        </strong>
+        <div class="text-right float-right">
+          <button class="btn btn-sm btn-outline-primary ml-2 box"
+            title="Update Owner">
+            <i class="fa fa-edit"></i> &nbsp;&nbsp;&nbsp;&nbsp;
+          </button>
+        </div>
+      </div>
+      <div class="card-body px-2 py-1">
+        <div class="float-left">
+          <img class="rounded float-left img-thumbnail profile-pic box" />
+        </div>
+        <div class="float-left ml-3" style="width: calc(100% - 140px);">
+          <div class="input-group mb-2">
+            <div class="input-group-prepend">
+              <span class="input-group-text box">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              </span>
+            </div>
+            <span class="form-control box">
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            </span>
+          </div>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text box">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              </span>
+            </div>
+            <span class="form-control box">
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card mb-3 pb-1">
+      <div class="card-header p-1 pl-1">
+        <strong class="box">
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        </strong>
+      </div>
+      <div class="card-body px-2 py-1">
+        <div class="row">
+          <div class="col-md-12 mb-3 mt-2">
+            <div class="input-group" >
+              <div class="input-group-prepend">
+                <span class="input-group-text box">
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                </span>
+              </div>
+              <span class="form-control box">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              </span>
+            </div>
+          </div>
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-header p-1 pl-1">
+              <strong class="box">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              </strong>
+            </div>
+            <div class="card-body px-0 py-0">
+              <ul class="list-group">
+                <li class="list-group-item box" *ngFor="let i of [1,2,3]">
+                  <span class="badge badge-info float-right">
+                    &nbsp;&nbsp;&nbsp;
+                  </span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-header p-1 pl-1">
+              <strong class="box">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              </strong>
+            </div>
+            <div class="card-body px-0 py-0">
+              <ul class="list-group">
+                <li class="list-group-item box" *ngFor="let i of [1,2,3]">
+                  <span class="badge badge-info float-right">
+                    &nbsp;&nbsp;&nbsp;
+                  </span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-5">
+    <div class="card mb-3">
+      <div class="card-header p-1 pl-1">
+        <strong class="box">
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        </strong>
+        <div class="text-right float-right">
+          <button class="btn btn-sm btn-outline-primary ml-2 box"
+            title="Add new stage">
+            <i class="fa fa-plus-square"></i> &nbsp;&nbsp;&nbsp;
+          </button>
+        </div>
+      </div>
+      <div class="card-body px-0 py-0">
+        <ul class="list-group">
+          <li class="list-group-item box" *ngFor="let stage of [1,2,3]">
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <a href="javascript:void(0);" class="badge badge-ouline-danger mt-1 ml-2 float-right"
+                style="color: red;" title="Delate Stage">
+              <i class="fa fa-trash"></i>
+            </a>
+            <a href="javascript:void(0);" class="badge badge-outline-primary mt-1 float-right"
+                title="Rename Stage">
+              <i class="fa fa-edit"></i>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="card mb-3">
+      <div class="card-header p-1 pl-1">
+        <strong class="box">
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        </strong>
+      </div>
+      <div class="card-body px-0 py-0">
+        <ul class="list-group">
+          <li class="list-group-item box" *ngFor="let team of [1,2,3]">
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <a href="javascript:void(0);" class="badge badge-outline-danger mt-1 ml-2 float-right"
+                style="color: red;" title="Delate Team">
+              <i class="fa fa-trash"></i>
+            </a>
+            <a href="javascript:void(0);" class="badge badge-outline-primary mt-1 float-right"
+                title="Rename Team">
+              <i class="fa fa-edit"></i>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

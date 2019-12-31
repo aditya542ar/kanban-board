@@ -8,7 +8,7 @@ public class UserDto extends BaseDto {
     private String firstName;
     private String lastName;
     private String userId;
-    private byte[] profilePic;
+    private String profilePic;
 
     public String getFirstName() {
         return firstName;
@@ -34,11 +34,11 @@ public class UserDto extends BaseDto {
         this.userId = userId;
     }
 
-    public byte[] getProfilePic() {
+    public String getProfilePic() {
         return profilePic;
     }
 
-    public void setProfilePic(byte[] profilePic) {
+    public void setProfilePic(String profilePic) {
         this.profilePic = profilePic;
     }
 }

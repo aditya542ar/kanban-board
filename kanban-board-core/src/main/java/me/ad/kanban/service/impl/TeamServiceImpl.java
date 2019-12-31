@@ -148,6 +148,8 @@ public class TeamServiceImpl implements TeamService {
                 .addEqualFilter("name", Optional.ofNullable(qd.getName()), nameSpec(qd.getName()))
                 .addInFilter("nameIn", Optional.ofNullable(qd.getNameIn()), nameInSpec(qd.getNameIn()))
                 .addLikeFilter("nameLike", Optional.ofNullable(qd.getNameLike()), nameLikeSpec(qd.getNameLike()))
+                .addEqualFilter("projectId", Optional.ofNullable(qd.getProjectId()), projectIdSpec(qd.getProjectId()))
+                .addInFilter("projectIdIn", Optional.ofNullable(qd.getProjectIdIn()), projectIdInSpec(qd.getProjectIdIn()))
                 .addSortByAndSortOrder(Optional.ofNullable(qd.getSortBy()), Optional.ofNullable(qd.getSortOrder()),
                         SORT_BY_SET, SORT_ORDER_SET);
         return filterBuilder;

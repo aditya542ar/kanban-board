@@ -82,7 +82,7 @@ public class StageController {
     }
 
     @DeleteMapping(path = "/{id}", consumes = {MediaType.APPLICATION_JSON_VALUE})
-    public void deleteStageById(@RequestBody List<String> idList) {
+    public void deleteStageByIds(@RequestBody List<String> idList) {
         stageService.deleteStages(idList);
     }
 

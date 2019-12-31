@@ -116,6 +116,9 @@ public class TaskServiceImpl implements TaskService {
                 .addEqualFilter("categoryId", Optional.ofNullable(qd.getCategoryId()), categoryIdSpec(qd.getCategoryId()))
                 .addEqualFilter("teamId", Optional.ofNullable(qd.getTeamId()), teamIdSpec(qd.getTeamId()))
                 .addEqualFilter("userId", Optional.ofNullable(qd.getUserId()), userIdSpec(qd.getUserId()))
+                .addEqualFilter("projectId", Optional.ofNullable(qd.getProjectId()), projectIdSpec(qd.getProjectId()))
+                .addInFilter("teamIdIn", Optional.ofNullable(qd.getTeamIdIn()), teamIdInSpec(qd.getTeamIdIn()))
+                .addInFilter("categoryIdIn", Optional.ofNullable(qd.getCategoryIdIn()), categoryIdInSpec(qd.getCategoryIdIn()))
                 .addSortByAndSortOrder(Optional.ofNullable(qd.getSortBy()), Optional.ofNullable(qd.getSortOrder()),
                         SORT_BY_SET, SORT_ORDER_SET);
         return filterBuilder;

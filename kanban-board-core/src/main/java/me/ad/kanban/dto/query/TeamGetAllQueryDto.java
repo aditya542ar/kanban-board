@@ -8,6 +8,8 @@ public class TeamGetAllQueryDto {
     private String name;
     private List<String> nameIn;
     private String nameLike;
+    private String projectId;
+    private List<String> projectIdIn;
     private String sortBy;
     private String sortOrder;
 
@@ -49,6 +51,22 @@ public class TeamGetAllQueryDto {
 
     public void setNameLike(String nameLike) {
         this.nameLike = nameLike;
+    }
+
+    public String getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(String projectId) {
+        this.projectId = projectId;
+    }
+
+    public List<String> getProjectIdIn() {
+        return projectIdIn;
+    }
+
+    public void setProjectIdIn(List<String> projectIdIn) {
+        this.projectIdIn = projectIdIn;
     }
 
     public String getSortBy() {

@@ -96,4 +96,9 @@ public class UserController {
         userService.deleteUsers(idList);
     }
 
+    @PostMapping(path = "/search", consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
+    public List<UserDto> searchByUserIdOrName(@RequestBody UserGetAllQueryDto queryDto) {
+        return userService.searchByUserIdOrName(queryDto);
+    }
+
 }

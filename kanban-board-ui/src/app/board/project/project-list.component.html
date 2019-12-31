@@ -1,0 +1,155 @@
+<div class="row">
+  <div class="col-md-6">
+    <span class="h1 mb-4"><i class="fa fa-list-alt"></i> List of Projects</span>
+  </div>
+  <div class="col-md-4 px-0">
+    <div class="input-group mt-2 mb-3">
+      <div class="input-group-prepend">
+        <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-toggle="dropdown">
+          SearchBy: {{currSearchBy}}
+        </button>
+        <div class="dropdown-menu">
+          <a class="dropdown-item" 
+          href="javascript:void(0)"
+          *ngFor="let searchBy of searchByList"
+          (click)="currSearchBy = searchBy"
+          >{{searchBy}}</a>
+        </div>
+      </div>
+      <input type="text" class="form-control" placeholder="Search project..." 
+      name="searchString"
+      [(ngModel)]="searchString">
+    </div>
+  </div>
+  <div class="col-md-2 pt-2 pl-0 text-right">
+    <button type="button" class="btn btn-success">
+      <i class="fa fa-plus"></i> New Project
+    </button>
+  </div>
+</div>
+<div class="row d-flex justify-content-around">
+  <div class="col-md-6" *ngFor="let p of allProjects | projectSearch: currSearchBy : searchString">
+    <div class="card mb-3 pb-1" *ngIf="showAllProjects">
+      <div class="card-header p-1 pl-2">
+        <strong>{{p.name}}</strong>
+        <div class="text-right float-right">
+          <a [routerLink]="['/project', p.id]" class="btn btn-sm btn-outline-primary ml-2">
+            <i class="fa fa-eye"></i> View
+          </a>
+        </div>
+      </div>
+      <div class="card-body px-2 py-1">
+        <!-- <h4 class="card-title">Card title</h4> -->
+        <p class="card-text mb-2 box px-2" *ngIf="!p.expandDescription">
+          <small>{{p.description | slice:0:150}} 
+            <a *ngIf="p.description.length > 150 && !p.expandDescription" (click)="p.expandDescription = true">...more</a>
+          </small>
+        </p>
+        <p class="card-text mb-2 box px-2" *ngIf="p.expandDescription">
+          <small>{{p.description}}
+            <a *ngIf="p.description.length > 150 && p.expandDescription" (click)="p.expandDescription = false">...less</a>
+          </small>
+        </p>
+        <button type="button" class="btn btn-primary no-pointer">
+          Teams 
+          <span class="badge badge-light" data-toggle="tooltip" data-placement="top" title="# of Teams">
+            #{{getTeamsByProjectId(teamsOfProjects, p.id).length}}
+          </span>
+        </button>
+
+        <button type="button" class="btn btn-info ml-2 no-pointer">
+          Categories 
+          <span class="badge badge-light" data-toggle="tooltip" data-placement="top" title="# of Categories">
+            #{{getStagesByProjectId(stagesOfProjects, p.id).length}}
+          </span>
+        </button>
+
+        <!-- <button type="button" class="btn btn-secondary ml-2">
+          Tasks 
+          <span class="badge badge-light" data-toggle="tooltip" data-placement="top" title="# of Categories">
+            #{{getTasksByProjectId(tasksOfProjects, p.id).length}}
+          </span>
+        </button> -->
+
+        <div class="row mx-0">
+          <div class="col-md-5 pl-0 mt-2">
+            <span class="badge badge-pill badge-warning text-left" style="line-height: 2em; min-width: 100%;">Owner: {{getUserById(owners, p.ownerId).userId}}</span>
+          </div>
+
+          <div class="col-md-7 pl-0 mt-2 text-right">
+            <span class="badge badge-pill badge-success" style="line-height: 2em;">StartDate: {{p.startDate ? p.startDate : "--"}}</span>
+            <span class="badge badge-pill badge-danger ml-2" style="line-height: 2em;">EndDate: {{p.endDate ? p.endDate : "--"}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Dummy Container to show Loading effect -->
+<div class="row d-flex justify-content-around" id="dummyBox" *ngIf="!showAllProjects">
+  <div class="col-md-6">
+    <div class="card mb-3 pb-1">
+      <div class="card-header p-2">
+        <strong class="box">
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        </strong>
+      </div>
+      <div class="card-body px-2 py-1">
+        <!-- <h4 class="card-title">Card title</h4> -->
+        <p class="card-text mb-2 box">
+          <small>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          </small>
+        </p>
+        <button type="button" class="btn btn-primary box">
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+          <span class="badge badge-light" data-toggle="tooltip" data-placement="top" title="# of Teams">
+            #&nbsp;&nbsp;
+          </span>
+        </button>
+
+        <button type="button" class="btn btn-info ml-2 box">
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+          <span class="badge badge-light" data-toggle="tooltip" data-placement="top" title="# of Categories">
+            #&nbsp;&nbsp;
+          </span>
+        </button>
+
+        <button type="button" class="btn btn-secondary ml-2 box">
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+          <span class="badge badge-light" data-toggle="tooltip" data-placement="top" title="# of Categories">
+            #&nbsp;&nbsp;&nbsp;
+          </span>
+        </button>
+
+        <div class="row mx-0">
+          <div class="col-md-5 pl-0 mt-2">
+            <span class="badge badge-pill badge-warning text-left box" style="line-height: 2em; min-width: 100%;">
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            </span>
+          </div>
+
+          <div class="col-md-7 pl-0 mt-2 text-right">
+            <span class="badge badge-pill badge-success box" style="line-height: 2em;">
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            </span>
+            <span class="badge badge-pill badge-danger box ml-2" style="line-height: 2em;">
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

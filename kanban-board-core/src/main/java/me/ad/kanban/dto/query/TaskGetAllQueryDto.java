@@ -9,10 +9,14 @@ public class TaskGetAllQueryDto {
     private List<String> nameIn;
     private String nameLike;
     private String categoryId;
+    private List<String> categoryIdIn;
     private String teamId;
+    private List<String> teamIdIn;
     private String userId;
+    private String projectId;
     private String sortBy;
     private String sortOrder;
+    private String groupBy;
 
     public String getId() {
         return id;
@@ -62,6 +66,14 @@ public class TaskGetAllQueryDto {
         this.categoryId = categoryId;
     }
 
+    public List<String> getCategoryIdIn() {
+        return categoryIdIn;
+    }
+
+    public void setCategoryIdIn(List<String> categoryIdIn) {
+        this.categoryIdIn = categoryIdIn;
+    }
+
     public String getTeamId() {
         return teamId;
     }
@@ -70,12 +82,28 @@ public class TaskGetAllQueryDto {
         this.teamId = teamId;
     }
 
+    public List<String> getTeamIdIn() {
+        return teamIdIn;
+    }
+
+    public void setTeamIdIn(List<String> teamIdIn) {
+        this.teamIdIn = teamIdIn;
+    }
+
     public String getUserId() {
         return userId;
     }
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(String projectId) {
+        this.projectId = projectId;
     }
 
     public String getSortBy() {
@@ -92,5 +120,13 @@ public class TaskGetAllQueryDto {
 
     public void setSortOrder(String sortOrder) {
         this.sortOrder = sortOrder;
+    }
+
+    public String getGroupBy() {
+        return groupBy;
+    }
+
+    public void setGroupBy(String groupBy) {
+        this.groupBy = groupBy;
     }
 }
