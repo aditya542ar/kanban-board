@@ -70,7 +70,9 @@ export class ProjectService {
 
   fetchProjectCount(){}
 
-  createProject(){}
+  createProject(project:Project){
+    return this.httpClient.post(this.baseApiUrl + this.projectBaseUrl + "/create", project);
+  }
 
   updateProject(id:string, project:Project): Observable<any> {
     return this.httpClient.put(this.baseApiUrl + this.projectBaseUrl + "/" + id + "/update", project);

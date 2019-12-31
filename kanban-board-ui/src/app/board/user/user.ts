@@ -6,10 +6,12 @@ export class User {
     public profilePic:string;
 
     constructor(obj?:any) {
-        this.id = obj.id;
-        this.firstName = obj.firstName;
-        this.lastName = obj.lastName;
-        this.userId = obj.userId;
-        this.profilePic = obj.profilePic;
+        if(obj) {
+            this.id = obj.id;
+            this.firstName = obj.firstName;
+            this.lastName = obj.lastName;
+            this.userId = obj.userId;
+            this.profilePic = obj.profilePic;
+        }
     }
 }

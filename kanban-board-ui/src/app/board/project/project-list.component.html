@@ -22,7 +22,8 @@
     </div>
   </div>
   <div class="col-md-2 pt-2 pl-0 text-right">
-    <button type="button" class="btn btn-success">
+    <button type="button" class="btn btn-success"
+      (click)="startCreateProject()">
       <i class="fa fa-plus"></i> New Project
     </button>
   </div>
@@ -86,8 +87,77 @@
   </div>
 </div>
 
+
+<!-- Modal shadow -->
+<div class="modalShadow" *ngIf="modal.isShow" [style.display]="modal.isShow ? 'block' : 'none'"></div>
+
+<!-- The Modal -->
+<div class="modal" name="createProject" [style.display]="modal.isShow ? 'block' : 'none'">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">{{modal.header}}</h4>
+        <!-- <button type="button" class="close" 
+        data-dismiss="modal"
+        (click)="hideModal(modal)">&times;</button> -->
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body" #modalBodyDiv>
+        <div *ngIf="modal.isShow">
+          <div class="alert alert-success" *ngIf="createProjectSuccess">
+            <strong>Success!</strong> {{popupMsg}}
+          </div>
+          <div class="alert alert-danger" *ngIf="createProjectFail">
+            <strong>Oopsss!!!</strong> {{popupMsg}}
+          </div>
+          <form name="createProjectForm" [ngClass]="{'dummyBox box no-pointer': creatingNewProject}">
+            <div class="form-group">
+              <label for="name">Name:</label>
+              <input type="text" class="form-control" placeholder="Enter name" 
+              id="name" name="name" [(ngModel)]=newProject.name>
+            </div>
+            <div class="form-group">
+              <label for="startDate">Start Date:</label>
+              <input type="date" class="form-control" placeholder="Select start date" 
+              id="startDate" name="startDate" [(ngModel)]="newProject.startDate">
+              <span><small>Date format should be in dd-mm-yyyy</small></span>
+            </div>
+            <div class="form-group">
+              <label for="endDate">End Date:</label>
+              <input type="date" class="form-control" placeholder="Select end date" 
+              id="endDate" name="endDate" [(ngModel)]="newProject.endDate">
+              <span><small>Date format should be in dd-mm-yyyy</small></span>
+            </div>
+            <div class="form-group">
+              <label for="description">Description:</label>
+              <textarea class="form-control" rows="5" 
+                id="description" name="description" [(ngModel)]="newProject.description">
+              </textarea>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer p-0" [ngClass]="{'no-pointer': creatingNewProject}">
+        <button type="button" class="btn btn-success" 
+        data-dismiss="modal"
+        (click)="createNewProject()">Create</button>
+
+        <button type="button" class="btn btn-danger" 
+        data-dismiss="modal"
+        (click)="hideModal()">Close</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
 <!-- Dummy Container to show Loading effect -->
-<div class="row d-flex justify-content-around" id="dummyBox" *ngIf="!showAllProjects">
+<div class="row d-flex justify-content-around dummyBox" *ngIf="!showAllProjects">
   <div class="col-md-6">
     <div class="card mb-3 pb-1">
       <div class="card-header p-2">
