@@ -30,15 +30,16 @@ export class HeaderComponent implements OnInit {
       });
   }
 
-  navigateToProjectDetail(projectId:string) {
+  changeProjectDropDpwn(projectId:string) {
     this.util.currProject = projectId;
-    this.router.navigate(["/project", projectId]).then( (e) => {
-      if (e) {
-        console.log("Navigation is successful!");
-      } else {
-        console.log("Navigation has failed!");
-      }
-    });
+    this.util.emitCurrentProjectChanged(projectId);
+    // this.router.navigate(["/project", projectId]).then( (e) => {
+    //   if (e) {
+    //     console.log("Navigation is successful!");
+    //   } else {
+    //     console.log("Navigation has failed!");
+    //   }
+    // });
   }
 
 }

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class EntityDtoMapperService implements MapperService {
@@ -95,7 +96,11 @@ public class EntityDtoMapperService implements MapperService {
         dto.setPriority(task.getPriority());
         dto.setCategory(mapStageToDto(task.getCategory()));
         dto.setTeam(mapTeamToDto(task.getTeam()));
-        dto.setUser(mapUserToDto(task.getUser()));
+        dto.setOwner(mapUserToDto(task.getOwner()));
+        dto.setTaskStageChanges(task.getTaskStageChangeSet()
+                .stream()
+                .map(this::mapTaskStageChangeToDto)
+                .collect(Collectors.toSet()));
         return dto;
     }
 
@@ -109,7 +114,11 @@ public class EntityDtoMapperService implements MapperService {
         task.setPriority(dto.getPriority());
         task.setCategory(mapDtoToStage(dto.getCategory()));
         task.setTeam(mapDtoToTeam(dto.getTeam()));
-        task.setUser(mapDtoToUser(dto.getUser()));
+        task.setOwner(mapDtoToUser(dto.getOwner()));
+        task.setTaskStageChangeSet(dto.getTaskStageChanges()
+                .stream()
+                .map(this::mapDtoToTaskStageChange)
+                .collect(Collectors.toSet()));
         return task;
     }
 
@@ -162,5 +171,29 @@ public class EntityDtoMapperService implements MapperService {
                 (pic) -> user.setProfilePic(pic.getBytes())
         );
         return user;
+    }
+
+    @Override
+    public TaskStageChangeDto mapTaskStageChangeToDto(TaskStageChange tsc) {
+        if(tsc == null) return null;
+        TaskStageChangeDto dto = new TaskStageChangeDto();
+        dto.setId(tsc.getId());
+        dto.setStage(mapStageToDto(tsc.getStage()));
+        dto.setStartTime(tsc.getStartTime());
+        dto.setEndTime(tsc.getEndTime());
+        dto.setVersion(tsc.getVersion());
+        return dto;
+    }
+
+    @Override
+    public TaskStageChange mapDtoToTaskStageChange(TaskStageChangeDto dto) {
+        if(dto == null) return null;
+        TaskStageChange tsc = new TaskStageChange();
+        tsc.setId(dto.getId());
+        tsc.setStage(mapDtoToStage(dto.getStage()));
+        tsc.setStartTime(dto.getStartTime());
+        tsc.setEndTime(dto.getEndTime());
+        tsc.setVersion(dto.getVersion());
+        return tsc;
     }
 }

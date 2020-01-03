@@ -9,6 +9,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Component
 public class DataLoader implements CommandLineRunner {
@@ -158,7 +159,13 @@ public class DataLoader implements CommandLineRunner {
         task1.setPriority(50);
         task1.setCategory(savedTodo);
         task1.setTeam(savedWf);
-        task1.setUser(savedNick);
+        task1.setOwner(savedNick);
+        TaskStageChange taskStageChange1 = new TaskStageChange();
+        taskStageChange1.setTask(task1);
+        taskStageChange1.setStartTime(LocalDateTime.now());
+        taskStageChange1.setStage(task1.getCategory());
+        taskStageChange1.setVersion(1);
+        task1.getTaskStageChangeSet().add(taskStageChange1);
         taskRepository.save(task1);
 
         Task task2 = new Task();
@@ -167,7 +174,13 @@ public class DataLoader implements CommandLineRunner {
         task2.setPriority(60);
         task2.setCategory(savedTodo);
         task2.setTeam(savedWf);
-        task2.setUser(savedNick);
+        task2.setOwner(savedNick);
+        TaskStageChange taskStageChange2 = new TaskStageChange();
+        taskStageChange2.setTask(task2);
+        taskStageChange2.setStartTime(LocalDateTime.now());
+        taskStageChange2.setStage(task2.getCategory());
+        taskStageChange2.setVersion(1);
+        task2.getTaskStageChangeSet().add(taskStageChange2);
         taskRepository.save(task2);
 
         Task task3 = new Task();
@@ -176,7 +189,13 @@ public class DataLoader implements CommandLineRunner {
         task3.setPriority(30);
         task3.setCategory(savedInProgress);
         task3.setTeam(savedUi);
-        task3.setUser(savedFoo);
+        task3.setOwner(savedFoo);
+        TaskStageChange taskStageChange3 = new TaskStageChange();
+        taskStageChange3.setTask(task3);
+        taskStageChange3.setStartTime(LocalDateTime.now());
+        taskStageChange3.setStage(task3.getCategory());
+        taskStageChange3.setVersion(1);
+        task3.getTaskStageChangeSet().add(taskStageChange3);
         taskRepository.save(task3);
     }
 }

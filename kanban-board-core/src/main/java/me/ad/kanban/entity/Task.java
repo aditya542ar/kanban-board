@@ -1,6 +1,8 @@
 package me.ad.kanban.entity;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Task extends BaseEntity {
@@ -23,8 +25,11 @@ public class Task extends BaseEntity {
     private Team team;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "owner_id")
+    private User owner;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "task")
+    private Set<TaskStageChange> taskStageChangeSet = new HashSet<>();
 
     public String getName() {
         return name;
@@ -66,11 +71,19 @@ public class Task extends BaseEntity {
         this.team = team;
     }
 
-    public User getUser() {
-        return user;
+    public User getOwner() {
+        return owner;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setOwner(User owner) {
+        this.owner = owner;
+    }
+
+    public Set<TaskStageChange> getTaskStageChangeSet() {
+        return taskStageChangeSet;
+    }
+
+    public void setTaskStageChangeSet(Set<TaskStageChange> taskStageChangeSet) {
+        this.taskStageChangeSet = taskStageChangeSet;
     }
 }

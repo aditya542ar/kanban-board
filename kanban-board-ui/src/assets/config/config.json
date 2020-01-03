@@ -1,3 +1,8 @@
 {
-    "webApiBaseUrl": "http://localhost:8080/kanban"
+    "webApiBaseUrl": "http://localhost:8080/kanban",
+    "projectBaseUrl": "/project",
+    "userBaseUrl": "/user",
+    "teamBaseUrl": "/team",
+    "stageBaseUrl": "/stage",
+    "taskBaseUrl": "/task"
 }

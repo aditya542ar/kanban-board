@@ -1,5 +1,9 @@
 package me.ad.kanban.dto;
 
+import me.ad.kanban.entity.TaskStageChange;
+
+import java.util.Set;
+
 public class TaskDto extends BaseDto {
 
     private String name;
@@ -7,7 +11,8 @@ public class TaskDto extends BaseDto {
     private int priority;
     private StageDto category;
     private TeamDto team;
-    private UserDto user;
+    private UserDto owner;
+    private Set<TaskStageChangeDto> taskStageChanges;
 
     public String getName() {
         return name;
@@ -49,11 +54,19 @@ public class TaskDto extends BaseDto {
         this.team = team;
     }
 
-    public UserDto getUser() {
-        return user;
+    public UserDto getOwner() {
+        return owner;
     }
 
-    public void setUser(UserDto user) {
-        this.user = user;
+    public void setOwner(UserDto owner) {
+        this.owner = owner;
+    }
+
+    public Set<TaskStageChangeDto> getTaskStageChanges() {
+        return taskStageChanges;
+    }
+
+    public void setTaskStageChanges(Set<TaskStageChangeDto> taskStageChanges) {
+        this.taskStageChanges = taskStageChanges;
     }
 }

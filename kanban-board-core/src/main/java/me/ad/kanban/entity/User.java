@@ -23,7 +23,7 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "owner")
     private Set<Project> ownedProjects = new HashSet<>();
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "owner")
     private Set<Task> tasks = new HashSet<>();
 
     @Lob

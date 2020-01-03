@@ -66,6 +66,13 @@ export class ProjectComponent implements OnInit {
     });
     // Show Project Drop down in header
     this.utilService.showProjectDropDown();
+    this.utilService.currPage = "project";
+    this.utilService.listenToCurrentProjectChanged()
+    .subscribe(
+      (projectId) => {
+        this.navigateToProjectDetails(projectId);
+      }
+    );
   }
 
   checkSubscriptionData() {
@@ -418,6 +425,27 @@ export class ProjectComponent implements OnInit {
   private navigateToProjectList() {
     this.router.navigateByUrl("/projectList");
   }
+
+  private navigateToProjectDetails(projectId:string) {
+    this.router.navigate(["/project", projectId]).then( (e) => {
+      if (e) {
+        console.log("Navigation is successful!");
+      } else {
+        console.log("Navigation has failed!");
+      }
+    });
+  }
+
+  // not required as using routerLink from html
+  /* navigateToTaskDashboard() {
+    this.router.navigate(["/dashboard", this.projectId]).then( (e) => {
+      if (e) {
+        console.log("Navigation is successful!");
+      } else {
+        console.log("Navigation has failed!");
+      }
+    });
+  } */
 
   private getNewProp(prop:string): string {
     return "new" + prop[0].toUpperCase() + prop.substr(1);

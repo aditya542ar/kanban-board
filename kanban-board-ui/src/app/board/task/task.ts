@@ -2,6 +2,14 @@ import { Stage } from '../stage/stage';
 import { Team } from '../team/team';
 import { User } from '../user/user';
 
+class TaskStageChange {
+    public id:string;
+    public stage:Stage;
+    public startTime:string;
+    public endTime:string;
+    public version:number;
+}
+
 export class Task {
     public id:string;
     public name:string;
@@ -9,7 +17,8 @@ export class Task {
     public priority:number;
     public category:Stage;
     public team:Team;
-    public user:User;
+    public owner:User;
+    public taskStageChanges:Array<TaskStageChange> = new Array<TaskStageChange>();
 
     constructor(obj?:any) {
         if(obj){
@@ -19,7 +28,8 @@ export class Task {
             this.priority = obj.priority;
             this.category = new Stage(obj.category);
             this.team = new Team(obj.team);
-            this.user = new User(obj.user);
+            this.owner = new User(obj.owner);
+            this.taskStageChanges = obj.taskStageChanges;
         }
     }
 }

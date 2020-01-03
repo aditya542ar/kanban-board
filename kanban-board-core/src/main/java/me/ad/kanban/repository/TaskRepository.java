@@ -44,8 +44,8 @@ public interface TaskRepository extends JpaRepository<Task, String>, JpaSpecific
     static Specification<Task> teamIdSpec(String teamId) {
         return (root, cq, cb) -> cb.equal(root.get("team").get("id"), teamId);
     }
-    static Specification<Task> userIdSpec(String userId) {
-        return (root, cq, cb) -> cb.equal(root.get("user").get("id"), userId);
+    static Specification<Task> ownerIdSpec(String userId) {
+        return (root, cq, cb) -> cb.equal(root.get("owner").get("id"), userId);
     }
     static Specification<Task> projectIdSpec(String projectId) {
         return (root, cq, cb) -> {

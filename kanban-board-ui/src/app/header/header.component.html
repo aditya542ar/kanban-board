@@ -12,7 +12,7 @@
                 <span class="input-group-text">Project</span>
               </div>
               <select class="form-control" id="projectName" [(ngModel)]="util.currProject"
-              (change)="navigateToProjectDetail(util.currProject)">
+              (change)="changeProjectDropDpwn(util.currProject)">
                 <option *ngFor="let project of util.getProjectDropDownList()"
                 value="{{project.id}}">
                   {{project.name}}
@@ -20,10 +20,14 @@
               </select>
             </div>
           </div>
-          <div class="col-md-3">
+          <div class="col-md-3 boardPageList">
             <div class="btn-group">
-              <button type="button" class="btn btn-primary active">Board</button>
-              <button type="button" class="btn btn-primary">Report</button>
+              <button type="button" class="btn btn-primary" 
+                [ngClass]="{'active': util.currPage == 'projectList' || util.currPage == 'project'}" 
+                [routerLink]="['/projectList']">Project List</button>
+              <button type="button" class="btn btn-primary"
+                [ngClass]="{'active': util.currPage == 'task-dashboard'}"
+                [routerLink]="['/dashboard']">Dashboard</button>
             </div>
           </div>
           <div class="col-md-4">
@@ -37,8 +41,13 @@
                   <a class="dropdown-item" href="#">Another action</a>
                 </div>
               </li>
-              <li class="nav-item active">
-                <a class="nav-link" href="#">Board</a>
+              <li class="nav-item">
+                <a class="nav-link" [routerLink]="['/projectList']"
+                [ngClass]="{'active': util.currPage == 'projectList' || 
+                    util.currPage == 'project' || 
+                    util.currPage == 'task-dashboard' }" >
+                  Board
+                </a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="#">Report</a>

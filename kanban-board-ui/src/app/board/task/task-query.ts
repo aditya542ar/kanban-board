@@ -8,7 +8,7 @@ export class TaskQuery {
     categoryIdIn:Array<string>;
     teamId:string;
     teamIdIn:Array<string>;
-    userId:string;
+    ownerId:string;
     projectId:string;
     sortBy:string;
     sortOrder:string;

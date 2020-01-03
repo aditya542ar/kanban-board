@@ -11,6 +11,8 @@ import { ProjectListComponent, ProjectSearchPipe } from './board/project/project
 import { ConfigService } from './config/config.service';
 import { ConfigLoader } from './config.loader';
 import { ProjectComponent } from './board/project/project.component';
+import { TaskDashboardComponent, TaskSearchPipe, TaskSortPipe } from './board/task/task-dashboard.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
   declarations: [
@@ -18,13 +20,17 @@ import { ProjectComponent } from './board/project/project.component';
     HeaderComponent,
     ProjectListComponent,
     ProjectComponent,
-    ProjectSearchPipe
+    ProjectSearchPipe,
+    TaskDashboardComponent,
+    TaskSearchPipe,
+    TaskSortPipe
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    FontAwesomeModule
   ],
   providers: [
     ConfigService,

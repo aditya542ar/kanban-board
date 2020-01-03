@@ -1,6 +1,7 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { Project } from '../board/project/project';
 import { User } from '../board/user/user';
+import { Observable, Observer } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,10 @@ export class UtilService {
   private projectDropDownList:Array<Project> = new Array<Project>();
   private reloadProjectList$:EventEmitter<any> = new EventEmitter<any>();
   public currProject:string;
+  public currPage:string;
   private loggedInUser:User;
+  private gotProjectAndLoggedInUser$:EventEmitter<any> = new EventEmitter<any>();
+  private currentProjectChanged$:EventEmitter<string> = new EventEmitter<string>();
 
   constructor() { }
 
@@ -29,6 +33,8 @@ export class UtilService {
 
   setProjectDropDownList(projectList:Array<Project>) {
     this.projectDropDownList = projectList;
+    if(projectList && projectList.length > 0) this.currProject = projectList[0].id;
+    this.gotProjectAndLoggedInUser$.emit("project");
     console.log("setProjectDropDownList", projectList);
     //workaround to set a random loggedIn user, untill the Login logic is build
     if(projectList) {
@@ -39,6 +45,9 @@ export class UtilService {
       user.userId = "dummy.d";
       this.setLoggedInUser(user);
     }
+    setTimeout(() => {
+      this.gotProjectAndLoggedInUser$.emit("loggedInUser");
+    }, 1000);
   }
 
   getProjectDropDownList():Array<Project> {
@@ -59,6 +68,30 @@ export class UtilService {
 
   getLoggedInUser() {
     return this.loggedInUser;
+  }
+
+  gotProjectAndLoggedInUser():Observable<any> {
+    return Observable.create((observer: Observer<any>) => {
+      if(this.currProject && this.loggedInUser) {
+        observer.next({"projectId": this.currProject, "loggedInUser": this.loggedInUser});
+      } else {
+        let gotProject = false;
+        let gotUser = false;
+        this.gotProjectAndLoggedInUser$.subscribe((name) => {
+          if(this.currProject && this.loggedInUser) {
+            observer.next({"projectId": this.currProject, "loggedInUser": this.loggedInUser});
+          }
+        });
+      }
+    });
+  }
+
+  emitCurrentProjectChanged(projectId:string) {
+    this.currentProjectChanged$.emit(projectId);
+  }
+
+  listenToCurrentProjectChanged() {
+    return this.currentProjectChanged$;
   }
   
 }

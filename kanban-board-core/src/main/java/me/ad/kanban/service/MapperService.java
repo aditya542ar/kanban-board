@@ -14,4 +14,6 @@ public interface MapperService {
     Team mapDtoToTeam(TeamDto dto);
     UserDto mapUserToDto(User user);
     User mapDtoToUser(UserDto dto);
+    TaskStageChangeDto mapTaskStageChangeToDto(TaskStageChange tsc);
+    TaskStageChange mapDtoToTaskStageChange(TaskStageChangeDto dto);
 }

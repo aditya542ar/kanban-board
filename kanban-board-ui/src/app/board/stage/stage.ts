@@ -7,7 +7,7 @@ export class Stage {
         if(obj) {
             this.id = obj.id;
             this.name = obj.name;
-            this.projectId = this.projectId;
+            this.projectId = obj.projectId;
         }
     }
 }

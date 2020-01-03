@@ -65,6 +65,7 @@ export class ProjectListComponent implements OnInit {
     this.checkSubscriptionData();
     this.loadAllProjects();
     this.utilService.hideProjectDropDown();
+    this.utilService.currPage = "projectList";
   }
 
   loadAllProjects():void {
