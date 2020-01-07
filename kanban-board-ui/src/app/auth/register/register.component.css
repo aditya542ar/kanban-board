@@ -1,0 +1,40 @@
+.dummyBox {
+    opacity: 0.7;
+    animation-name: loadDummyBox;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+    -webkit-animation-name: loadDummyBox;
+    -webkit-animation-duration: 2s;
+    -webkit-animation-iteration-count: infinite;
+    -moz-animation-name: loadDummyBox;
+    -moz-animation-duration: 2s;
+    -moz-animation-iteration-count: infinite;
+    -o-animation-name: loadDummyBox;
+    -o-animation-duration: 2s;
+    -o-animation-iteration-count: infinite;
+}
+.box {
+    background-color: #ffffff;
+    background-image: linear-gradient(315deg, #ffffff 0%, #d7e1ec 74%);
+}
+
+.no-pointer {
+    pointer-events: none;
+}
+
+@keyframes loadDummyBox {
+    from { opacity: 0.7; }
+    to { opacity: 0.3; }
+}
+@-webkit-keyframes loadDummyBox {
+    from { opacity: 0.7; }
+    to { opacity: 0.3; }
+}
+@-o-keyframes loadDummyBox {
+    from { opacity: 0.7; }
+    to { opacity: 0.3; }
+}
+@-moz-keyframes loadDummyBox {
+    from { opacity: 0.7; }
+    to { opacity: 0.3; }
+}

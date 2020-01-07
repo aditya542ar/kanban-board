@@ -90,4 +90,13 @@ public class TeamController {
         teamService.deleteTeams(idList);
     }
 
+    @PostMapping(path = "/{id}/users/add", consumes = {MediaType.APPLICATION_JSON_VALUE})
+    public void addUserToTeam(@PathVariable("id") String teamId, @RequestBody UserDto userDto) {
+        teamService.addUserToTeam(teamId, userDto);
+    }
+
+    @DeleteMapping(path = "/{id}/users/{userId}/remove")
+    public void removeUserFromTeam(@PathVariable("id") String teamId, @PathVariable("userId") String userId) {
+        teamService.removeUserFromTeam(teamId, userId);
+    }
 }

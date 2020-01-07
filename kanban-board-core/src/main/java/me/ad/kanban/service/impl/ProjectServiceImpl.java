@@ -4,6 +4,7 @@ import me.ad.kanban.config.CustomMessageProperties;
 import me.ad.kanban.dto.ProjectDto;
 import me.ad.kanban.dto.StageDto;
 import me.ad.kanban.dto.TeamDto;
+import me.ad.kanban.dto.UserDto;
 import me.ad.kanban.dto.query.ProjectGetAllQueryDto;
 import me.ad.kanban.entity.Project;
 import me.ad.kanban.repository.ProjectRepository;
@@ -89,6 +90,22 @@ public class ProjectServiceImpl implements ProjectService {
             return projectOpt.get().getTeams()
                     .stream().map(mapperService::mapTeamToDto)
                     .collect(Collectors.toSet());
+        }
+        throw new IllegalArgumentException(
+                MessageFormat.format(message.getProjectNotExist(), projectId));
+    }
+
+    @Override
+    public Set<UserDto> findUsersByProjectId(String projectId) {
+        Optional<Project> projectOpt = projectRepository.findById(projectId);
+        if(projectOpt.isPresent()) {
+            Set<UserDto> users = new HashSet<>();
+            projectOpt.get().getTeams().forEach((team) -> {
+                team.getUsers().forEach((user) -> {
+                    users.add(mapperService.mapUserToDto(user));
+                });
+            });
+            return users;
         }
         throw new IllegalArgumentException(
                 MessageFormat.format(message.getProjectNotExist(), projectId));

@@ -1,0 +1,39 @@
+<div class="row d-flex justify-content-around">
+  <form name="loginForm" class="col-md-6">
+    <div class="card">
+      <div class="card-header">
+        <strong>Login</strong>
+        <div class="text-right float-right">
+          <button type="button" class="btn btn-sm btn-outline-primary ml-2"
+            [routerLink]="['/register']"
+            title="New User">
+            <i class="fa fa-plus"></i> New User
+          </button>
+        </div>
+      </div>
+      <div class="card-body px-2 py-1">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text">@</span>
+              </div>
+              <input type="text" class="form-control" placeholder="UserId" name="username" [(ngModel)]="username">
+            </div>
+          
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text">#</span>
+              </div>
+              <input type="password" class="form-control" placeholder="Password" name="password" [(ngModel)]="password">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer text-right">
+        <button type="submit" class="btn btn-outline-success mr-3" (click)="doLogin()">Login</button>
+        <button type="reset" class="btn btn-outline-danger">Reset</button>
+      </div>
+    </div>
+  </form>
+</div>

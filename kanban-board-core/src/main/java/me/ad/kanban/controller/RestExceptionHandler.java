@@ -17,22 +17,22 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(value = {NoSuchElementException.class})
     protected ResponseEntity<Object> handleNoSuchElementException(
             RuntimeException ex, WebRequest request) {
-        ErrorDto err = new ErrorDto();
+        /*ErrorDto err = new ErrorDto();
         err.setStatus(HttpStatus.NOT_FOUND.toString());
         err.setErrorCode(ex.getClass().getSimpleName());
-        err.setErrorMessage(ex.getMessage());
-        return handleExceptionInternal(ex, err,
+        err.setErrorMessage(ex.getMessage());*/
+        return handleExceptionInternal(ex, ex,
                 new HttpHeaders(), HttpStatus.NOT_FOUND, request);
     }
 
     @ExceptionHandler(value = {IllegalArgumentException.class})
     protected ResponseEntity<Object> handleIllegalArgumentException(
             RuntimeException ex, WebRequest request) {
-        ErrorDto err = new ErrorDto();
+        /*ErrorDto err = new ErrorDto();
         err.setStatus(HttpStatus.BAD_REQUEST.name());
         err.setErrorCode(ex.getClass().getSimpleName());
-        err.setErrorMessage(ex.getMessage());
-        return handleExceptionInternal(ex, err,
+        err.setErrorMessage(ex.getMessage());*/
+        return handleExceptionInternal(ex, ex,
                 new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
 }

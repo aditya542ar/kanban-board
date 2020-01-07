@@ -63,17 +63,32 @@ export class ProjectListComponent implements OnInit {
 
   ngOnInit() {
     this.checkSubscriptionData();
-    this.loadAllProjects();
     this.utilService.hideProjectDropDown();
     this.utilService.currPage = "projectList";
+    this.utilService.gotProjectAndLoggedInUser().subscribe(
+      (data) => {
+        this.loadAllProjects(data.loggedInUser);
+      }
+    )
   }
 
-  loadAllProjects():void {
-    this.projectService.fetchAllProjects().subscribe(
+  loadAllProjects(user?:User):void {
+    if(!user) user = this.utilService.getLoggedInUser();
+    this.projectService.fetchAllProjectsByUserId(user).subscribe(
       (res) => {
         console.log(res);
         this.allProjects = res;
         this.gotSubscriptionData$.emit(new EmitAction("loadAllProjects", true));
+        if(this.allProjects.length == 0) {
+          console.log("all projects length = 0 , setting all got data as true");
+          this.gotUserData = true;
+          this.owners = [];
+          this.gotTeamData = true;
+          this.teamsOfProjects = [];
+          this.gotStageData = true;
+          this.stagesOfProjects = [];
+          this.gotSubscriptionData$.emit(new EmitAction("loadAllProjects", true));
+        }
         let userIds = this.allProjects.map((p) => p.ownerId);
         console.log("userIds", userIds);
         this.projectService.fetchUserByIds(userIds).subscribe(

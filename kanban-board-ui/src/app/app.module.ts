@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { APP_INITIALIZER } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { ProjectListComponent, ProjectSearchPipe } from './board/project/project-list.component';
@@ -13,6 +13,11 @@ import { ConfigLoader } from './config.loader';
 import { ProjectComponent } from './board/project/project.component';
 import { TaskDashboardComponent, TaskSearchPipe, TaskSortPipe } from './board/task/task-dashboard.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { LoginComponent } from './auth/login/login.component';
+import { BasicAuthHttpInterceptorService } from './auth/basic-auth-http-interceptor.service';
+import { AuthService } from './auth/auth.service';
+import { RegisterComponent } from './auth/register/register.component';
+import { TeamComponent } from './board/team/team.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +28,10 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     ProjectSearchPipe,
     TaskDashboardComponent,
     TaskSearchPipe,
-    TaskSortPipe
+    TaskSortPipe,
+    LoginComponent,
+    RegisterComponent,
+    TeamComponent
   ],
   imports: [
     BrowserModule,
@@ -34,10 +42,16 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
   ],
   providers: [
     ConfigService,
+    AuthService,
     {
       provide: APP_INITIALIZER,
       useFactory: ConfigLoader,
       deps: [ConfigService],
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS, 
+      useClass: BasicAuthHttpInterceptorService, 
       multi: true
     }
   ],

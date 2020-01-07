@@ -4,6 +4,7 @@ import me.ad.kanban.config.CustomMessageProperties;
 import me.ad.kanban.dto.ProjectDto;
 import me.ad.kanban.dto.StageDto;
 import me.ad.kanban.dto.TeamDto;
+import me.ad.kanban.dto.UserDto;
 import me.ad.kanban.dto.query.ProjectGetAllQueryDto;
 import me.ad.kanban.service.MapperService;
 import me.ad.kanban.service.ProjectService;
@@ -12,6 +13,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,7 +38,9 @@ public class ProjectController {
     }
 
     @GetMapping(path = {"", "/", "/all"}, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public List<ProjectDto> getAllProject(Optional<ProjectGetAllQueryDto> queryDto) {
+    public List<ProjectDto> getAllProject(Optional<ProjectGetAllQueryDto> queryDto, Authentication auth) {
+        log.info("ProjectController -> getAllProject auth" + auth.getName() + "::");
+        log.info("username" + ((UserDetails) auth.getPrincipal()).getUsername());
         return projectService.findAllProjectsWithFilterQuery(queryDto);
     }
 
@@ -76,6 +81,11 @@ public class ProjectController {
     @GetMapping(path = "/{id}/teams", produces = {MediaType.APPLICATION_JSON_VALUE})
     public Set<TeamDto> getTeamsByProjectId(@PathVariable("id") String id) {
         return projectService.findTeamsByProjectId(id);
+    }
+
+    @GetMapping(path = "/{id}/users", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public Set<UserDto> getUsersByProjectId(@PathVariable("id") String id) {
+        return projectService.findUsersByProjectId(id);
     }
 
     @GetMapping(path = "/{id}/categories", produces = {MediaType.APPLICATION_JSON_VALUE})

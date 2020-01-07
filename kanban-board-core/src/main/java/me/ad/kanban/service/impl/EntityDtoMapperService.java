@@ -6,9 +6,11 @@ import me.ad.kanban.entity.*;
 import me.ad.kanban.repository.*;
 import me.ad.kanban.service.MapperService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
+import java.util.Base64;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -21,17 +23,19 @@ public class EntityDtoMapperService implements MapperService {
     private final TaskRepository taskRepository;
     private final TeamRepository teamRepository;
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
     public EntityDtoMapperService(CustomMessageProperties message, ProjectRepository projectRepository,
                                   StageRepository stageRepository, TaskRepository taskRepository,
-                                  TeamRepository teamRepository, UserRepository userRepository) {
+                                  TeamRepository teamRepository, UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.message = message;
         this.projectRepository = projectRepository;
         this.stageRepository = stageRepository;
         this.taskRepository = taskRepository;
         this.teamRepository = teamRepository;
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -169,6 +173,11 @@ public class EntityDtoMapperService implements MapperService {
         user.setLastName(dto.getLastName());
         Optional.ofNullable(dto.getProfilePic()).ifPresent(
                 (pic) -> user.setProfilePic(pic.getBytes())
+        );
+        Optional.ofNullable(dto.getPassword()).ifPresent(
+                (password) -> user.setPassword(
+                        passwordEncoder.encode(new String(Base64.getDecoder().decode(password)))
+                )
         );
         return user;
     }

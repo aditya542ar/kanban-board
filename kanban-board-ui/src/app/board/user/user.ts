@@ -3,6 +3,7 @@ export class User {
     public firstName:string;
     public lastName:string;
     public userId:string;
+    public password:string;
     public profilePic:string;
 
     constructor(obj?:any) {
@@ -11,6 +12,7 @@ export class User {
             this.firstName = obj.firstName;
             this.lastName = obj.lastName;
             this.userId = obj.userId;
+            this.password = obj.password;
             this.profilePic = obj.profilePic;
         }
     }

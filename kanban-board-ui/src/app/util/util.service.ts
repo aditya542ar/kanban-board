@@ -16,6 +16,7 @@ export class UtilService {
   private loggedInUser:User;
   private gotProjectAndLoggedInUser$:EventEmitter<any> = new EventEmitter<any>();
   private currentProjectChanged$:EventEmitter<string> = new EventEmitter<string>();
+  private loggedInUserSet$:EventEmitter<string> = new EventEmitter<string>();
 
   constructor() { }
 
@@ -37,17 +38,17 @@ export class UtilService {
     this.gotProjectAndLoggedInUser$.emit("project");
     console.log("setProjectDropDownList", projectList);
     //workaround to set a random loggedIn user, untill the Login logic is build
-    if(projectList) {
-      let user:User = new User();
-      user.id = projectList[0].ownerId;
-      user.firstName = "Dummy";
-      user.lastName = "Dumb";
-      user.userId = "dummy.d";
-      this.setLoggedInUser(user);
-    }
-    setTimeout(() => {
-      this.gotProjectAndLoggedInUser$.emit("loggedInUser");
-    }, 1000);
+    // if(projectList) {
+    //   let user:User = new User();
+    //   user.id = projectList[0].ownerId;
+    //   user.firstName = "Dummy";
+    //   user.lastName = "Dumb";
+    //   user.userId = "dummy.d";
+    //   this.setLoggedInUser(user);
+    // }
+    // setTimeout(() => {
+    //   this.gotProjectAndLoggedInUser$.emit("loggedInUser");
+    // }, 1000);
   }
 
   getProjectDropDownList():Array<Project> {
@@ -63,7 +64,12 @@ export class UtilService {
   }
 
   setLoggedInUser(user:User) {
+    console.log("setting logged in user");
     this.loggedInUser = user;
+    if(user) {
+      this.loggedInUserSet$.emit(user.userId);
+      this.gotProjectAndLoggedInUser$.emit("loggedInUser");
+    }
   }
 
   getLoggedInUser() {
@@ -72,14 +78,26 @@ export class UtilService {
 
   gotProjectAndLoggedInUser():Observable<any> {
     return Observable.create((observer: Observer<any>) => {
-      if(this.currProject && this.loggedInUser) {
-        observer.next({"projectId": this.currProject, "loggedInUser": this.loggedInUser});
+      if(this.projectDropDownList && this.loggedInUser) {
+        observer.next({"project": this.projectDropDownList, "projectId": this.currProject, "loggedInUser": this.loggedInUser});
       } else {
-        let gotProject = false;
-        let gotUser = false;
         this.gotProjectAndLoggedInUser$.subscribe((name) => {
-          if(this.currProject && this.loggedInUser) {
-            observer.next({"projectId": this.currProject, "loggedInUser": this.loggedInUser});
+          if(this.projectDropDownList && this.loggedInUser) {
+            observer.next({"project": this.projectDropDownList, "projectId": this.currProject, "loggedInUser": this.loggedInUser});
+          }
+        });
+      }
+    });
+  }
+
+  gotLoggedInUser():Observable<any> {
+    return Observable.create((observer: Observer<any>) => {
+      if(this.loggedInUser) {
+        observer.next({"loggedInUser": this.loggedInUser});
+      } else {
+        this.loggedInUserSet$.subscribe((name) => {
+          if(this.loggedInUser) {
+            observer.next({"loggedInUser": this.loggedInUser});
           }
         });
       }
@@ -92,6 +110,10 @@ export class UtilService {
 
   listenToCurrentProjectChanged() {
     return this.currentProjectChanged$;
+  }
+
+  listenToLoggedInUserSet() {
+    return this.loggedInUserSet$;
   }
   
 }

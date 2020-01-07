@@ -1,5 +1,6 @@
 {
     "webApiBaseUrl": "http://localhost:8080/kanban",
+    "authBaseUrl": "/authenticate",
     "projectBaseUrl": "/project",
     "userBaseUrl": "/user",
     "teamBaseUrl": "/team",

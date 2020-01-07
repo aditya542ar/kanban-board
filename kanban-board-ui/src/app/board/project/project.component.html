@@ -14,7 +14,7 @@
     </span>
     <a href="javascript:void(0);" class="badge badge-outline-primary mt-1 text-left"
       title="Rename Project"
-      *ngIf="!edit.isName && !edit.isSaving"
+      *ngIf="!edit.isName && !edit.isSaving && loggedInUser.id == projectData.ownerId"
       (click)="startEdit('name')">
       <i class="fa fa-edit"></i>
     </a>
@@ -42,7 +42,7 @@
         <div class="text-right float-right">
           <button class="btn btn-sm btn-outline-primary ml-2"
             title="Edit Description"
-            *ngIf="!edit.isDescription && !edit.isSaving"
+            *ngIf="!edit.isDescription && !edit.isSaving && loggedInUser.id == projectData.ownerId"
             (click)="startEdit('description')">
             <i class="fa fa-edit"></i> Edit
           </button>
@@ -88,7 +88,7 @@
             *ngIf="edit.isStartDate" />
             <a href="javascript:void(0);" class="badge badge-outline-primary mt-1 float-right"
               title="Edit Start Date"
-              *ngIf="!edit.isStartDate && !edit.isSaving"
+              *ngIf="!edit.isStartDate && !edit.isSaving && loggedInUser.id == projectData.ownerId"
               (click)="startEdit('startDate')">
               <i class="fa fa-edit"></i>
             </a>
@@ -126,7 +126,7 @@
               *ngIf="edit.isEndDate" />
             <a href="javascript:void(0);" class="badge badge-outline-primary mt-1 float-right"
                 title="Edit End Date"
-                *ngIf="!edit.isEndDate && !edit.isSaving"
+                *ngIf="!edit.isEndDate && !edit.isSaving && loggedInUser.id == projectData.ownerId"
                 (click)="startEdit('endDate')">
                 <i class="fa fa-edit"></i>
             </a>
@@ -154,7 +154,7 @@
         <div class="text-right float-right">
           <button class="btn btn-sm btn-outline-primary ml-2"
             title="Update Owner"
-            *ngIf="!edit.isOwnerId && !edit.isSaving"
+            *ngIf="!edit.isOwnerId && !edit.isSaving && loggedInUser.id == projectData.ownerId"
             (click)="startEdit('ownerId')">
             <i class="fa fa-edit"></i> Edit
           </button>
@@ -261,13 +261,26 @@
     </div>
   </div>
   <div class="col-md-5">
+    <div class="card mb-3 pb-0">
+      <div class="card-header p-1 pl-1">
+        <strong>Manager Users</strong>
+        <div class="text-right float-right">
+          <button  type="button" class="btn btn-sm btn-outline-primary ml-2"
+            [routerLink]="['user-list']"
+            *ngIf="!(isAddStage || isAddingStage || isRenameStage || isRemovingStage || isRenamingStage || isRenameStage) && loggedInUser.id == projectData.ownerId"
+            title="Manager Users">
+            <i class="fa fa-link"></i>
+          </button>
+        </div>
+      </div>
+    </div>
     <div class="card mb-3">
       <div class="card-header p-1 pl-1">
         <strong>Stages</strong>
         <div class="text-right float-right">
           <button class="btn btn-sm btn-outline-primary ml-2"
             (click)="startAddStage()"
-            *ngIf="!(isAddStage || isAddingStage || isRenameStage || isRemovingStage || isRenamingStage || isRenameStage)"
+            *ngIf="!(isAddStage || isAddingStage || isRenameStage || isRemovingStage || isRenamingStage || isRenameStage) && loggedInUser.id == projectData.ownerId"
             title="Add new stage">
             <i class="fa fa-plus-square"></i> Add
           </button>
@@ -279,7 +292,7 @@
           [ngClass]="{'dummyBox box': (isRemovingStage || isRenamingStage) && currStage.id == stage.id}">
             <div *ngIf="!(isRenameStage && currStage.index == i)">
               <span>{{stage.name}}</span>
-              <span *ngIf="!(isAddStage || isAddingStage || isRenameStage || isRenamingStage || isRemovingStage)">
+              <span *ngIf="!(isAddStage || isAddingStage || isRenameStage || isRenamingStage || isRemovingStage) && loggedInUser.id == projectData.ownerId">
                 <a href="javascript:void(0);" class="badge badge-ouline-danger mt-1 ml-2 float-right"
                   style="color: red;" title="Delate Stage"
                   *ngIf="!isRemovingStage"
@@ -339,7 +352,7 @@
         <div class="text-right float-right">
           <button class="btn btn-sm btn-outline-primary ml-2"
             (click)="startAddTeam()"
-            *ngIf="!(isAddTeam || isAddingTeam || isRenameTeam || isRemovingTeam || isRenamingTeam || isRenameTeam)"
+            *ngIf="!(isAddTeam || isAddingTeam || isRenameTeam || isRemovingTeam || isRenamingTeam || isRenameTeam) && loggedInUser.id == projectData.ownerId"
             title="Add new team">
             <i class="fa fa-plus-square"></i> Add
           </button>
@@ -351,7 +364,7 @@
           [ngClass]="{'dummyBox box': (isRemovingTeam || isRenamingTeam) && currTeam.id == team.id}">
             <div *ngIf="!(isRenameTeam && currTeam.index == i)">
               <span>{{team.name}}</span>
-              <span *ngIf="!(isAddTeam || isAddingTeam || isRenameTeam || isRenamingTeam || isRemovingTeam)">
+              <span *ngIf="!(isAddTeam || isAddingTeam || isRenameTeam || isRenamingTeam || isRemovingTeam) && loggedInUser.id == projectData.ownerId">
                 <a href="javascript:void(0);" class="badge badge-ouline-danger mt-1 ml-2 float-right"
                   style="color: red;" title="Delate Team"
                   *ngIf="!isRemovingTeam"

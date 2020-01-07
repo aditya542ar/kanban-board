@@ -20,6 +20,7 @@ import { Modal } from '../util/modal';
 })
 export class TaskSearchPipe implements PipeTransform {
   transform(items:Array<Task>, field:string, value:string): Array<Task> {
+    console.log("search value", items, field, value);
     if(!items) return [];
     if(!value || value.trim().length == 0) return items;
     return items.filter(p => {
@@ -193,63 +194,71 @@ export class TaskDashboardComponent implements OnInit {
     console.log("currSearchBy", this.currSearchBy, "currSortBy", this.currSortBy);
     // Reset all data before loading a new project tasks
     this.resetAllDataBeforeLoading();
-    //this.taskService.fetchAllTasksByProjectIdAndOwnerId(projectId, loggedInUser.id)
-    this.taskService.fetchAllTasksByProjectId(projectId)
-    .subscribe(
-      (tasks:Array<Task>) => {
-        this.allTasks = tasks;
-        this.gotTaskData = true;
+    this.taskService.fetchTeamsByUserId(loggedInUser.id).subscribe(
+      (teams:Array<Team>) => {
+        this.allTeams = teams;
+        this.gotTeamData = true;
         this.gotSubscriptionData$.emit(new EmitAction("loadTasks", true));
-        this.taskService.fetchAllStagesByProjectId(projectId)
-        .subscribe(
-          (stages:Array<Stage>) => {
-            this.allStages = stages;
-            this.gotStageData = true;
-            if(this.allStages && this.allStages.length > 0) this.currStage = this.allStages[0];
-            this.gotSubscriptionData$.emit(new EmitAction("loadTasks", true));
-
-            // testing max version per each task & stage
-            this.allTasks.forEach((task) => {
-              this.assignTaskStageChange(task);
-              console.log("task", task);
+        let c:number = 0;
+        this.allTeams.forEach(
+          (team:Team) => {
+            this.taskService.fetchUsersByTeamId(team.id).subscribe(
+              (users:Array<User>) => {
+                c++;
+                team["users"] = users;
+                users.forEach((user:User) => {
+                  this.allUsers = this.allUsers || new Array<User>();
+                  if(this.allUsers.indexOf(user) == -1) 
+                    this.allUsers.push(user);
+                });
+                if(c == this.allTeams.length) {
+                  console.log("allUsers", this.allUsers);
+                  this.gotUserData = true;
+                  this.gotSubscriptionData$.emit(new EmitAction("loadTasks", true));
+                }
             });
-
+        });
+        
+        let teamIds:Array<string> = this.allTeams.map((t) => t.id);
+        this.taskService.fetchAllTasksByTeamIds(teamIds)
+        .subscribe(
+          (tasks:Array<Task>) => {
+            this.allTasks = tasks;
+            this.gotTaskData = true;
+            this.gotSubscriptionData$.emit(new EmitAction("loadTasks", true));
+            this.fetchAllStagesByProjectId(projectId);
+          }, (err) => {
+            this.modal.name = "msgModal";
+            this.modal.body = {
+              "status": "fail",
+              "data": "Unable to load Tasks. Please try again later...!!"
+            };
+            this.showModal(this.modal);
           }
         );
-        this.taskService.fetchAllTeamsByProjectId(projectId)
-        .subscribe(
-          (teams:Array<Team>) => {
-            this.allTeams = teams;
-            this.gotTeamData = true;
-            this.gotSubscriptionData$.emit(new EmitAction("loadTasks", true));
-            let c:number = 0;
-            this.allTeams.forEach(
-              (team:Team) => {
-                this.taskService.fetchUsersByTeamId(team.id).subscribe(
-                  (users:Array<User>) => {
-                    c++;
-                    users.forEach((user:User) => {
-                      this.allUsers = this.allUsers || new Array<User>();
-                      if(this.allUsers.indexOf(user) == -1) 
-                        this.allUsers.push(user);
-                    });
-                    if(c == this.allTeams.length) {
-                      console.log("allUsers", this.allUsers);
-                      this.gotUserData = true;
-                      this.gotSubscriptionData$.emit(new EmitAction("loadTasks", true));
-                    }
-                  });
-              });
-          });
-      }, (err) => {
-        this.modal.name = "msgModal";
-        this.modal.body = {
-          "status": "fail",
-          "data": "Unable to load Tasks. Please try again later...!!"
-        };
-        this.showModal(this.modal);
       }
-    );
+    )
+    //this.taskService.fetchAllTasksByProjectIdAndOwnerId(projectId, loggedInUser.id)
+    //this.taskService.fetchAllTasksByProjectId(projectId)
+    
+  }
+
+  fetchAllStagesByProjectId(projectId) {
+    this.taskService.fetchAllStagesByProjectId(projectId)
+    .subscribe(
+      (stages:Array<Stage>) => {
+        this.allStages = stages;
+        this.gotStageData = true;
+        if(this.allStages && this.allStages.length > 0) this.currStage = this.allStages[0];
+        this.gotSubscriptionData$.emit(new EmitAction("loadTasks", true));
+
+        // testing max version per each task & stage
+        this.allTasks.forEach((task) => {
+          this.assignTaskStageChange(task);
+          console.log("task", task);
+        });
+
+      });
   }
 
   assignTaskStageChange(task:Task) {
@@ -258,6 +267,10 @@ export class TaskDashboardComponent implements OnInit {
       if(maxVersion == 0) task[stage.id] = {};
       else task[stage.id] = task.taskStageChanges.filter((tsc) => tsc.stage.id == stage.id && tsc.version == maxVersion)[0];
     });
+  }
+
+  setCurrStage(stage:Stage) {
+    this.currStage = stage;
   }
 
   showModal(modal:Modal) {

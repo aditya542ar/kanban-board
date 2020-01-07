@@ -6,9 +6,11 @@ import me.ad.kanban.dto.TeamDto;
 import me.ad.kanban.dto.UserDto;
 import me.ad.kanban.dto.query.TeamGetAllQueryDto;
 import me.ad.kanban.entity.Team;
+import me.ad.kanban.entity.User;
 import me.ad.kanban.filter.FilterBuilder;
 import me.ad.kanban.repository.ProjectRepository;
 import me.ad.kanban.repository.TeamRepository;
+import me.ad.kanban.repository.UserRepository;
 import me.ad.kanban.service.MapperService;
 import me.ad.kanban.service.TeamService;
 import org.slf4j.Logger;
@@ -17,6 +19,7 @@ import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -35,15 +38,17 @@ public class TeamServiceImpl implements TeamService {
     private final ObjectFactory<FilterBuilder<Team>> filterBuilderObjectFactory;
     private final TeamRepository teamRepository;
     private final ProjectRepository projectRepository;
+    private final UserRepository userRepository;
 
     @Autowired
     public TeamServiceImpl(CustomMessageProperties message, MapperService mapperService, ObjectFactory<FilterBuilder<Team>> filterBuilderObjectFactory, TeamRepository teamRepository,
-                           ProjectRepository projectRepository) {
+                           ProjectRepository projectRepository, UserRepository userRepository) {
         this.message = message;
         this.mapperService = mapperService;
         this.filterBuilderObjectFactory = filterBuilderObjectFactory;
         this.teamRepository = teamRepository;
         this.projectRepository = projectRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -81,7 +86,20 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
+    @Transactional
     public TeamDto saveOrUpdateTeamByDto(TeamDto teamDto) {
+        if(teamDto != null && teamDto.getId() == null) {
+            // new team
+            // add project owner as a user to the team
+            Team savedTeam = teamRepository.save(
+                    mapperService.mapDtoToTeam(teamDto));
+            // get project Details
+            User owner = savedTeam.getProject().getOwner();
+            savedTeam.getUsers().add(owner);
+            owner.getTeams().add(savedTeam);
+            teamRepository.save(savedTeam);
+            return mapperService.mapTeamToDto(savedTeam);
+        }
         return mapperService.mapTeamToDto(
                 teamRepository.save(
                         mapperService.mapDtoToTeam(teamDto)));
@@ -94,6 +112,48 @@ public class TeamServiceImpl implements TeamService {
             return teamOpt.get().getUsers()
                     .stream().map(mapperService::mapUserToDto)
                     .collect(Collectors.toSet());
+        } else {
+            throw new IllegalArgumentException(
+                    MessageFormat.format(message.getTeamNotExist(), teamId));
+        }
+    }
+
+    @Override
+    public void addUserToTeam(String teamId, UserDto userDto) {
+        Optional<Team> teamOpt = teamRepository.findById(teamId);
+        if(teamOpt.isPresent()) {
+            // check user
+            Optional<User> userOpt = userRepository.findById(userDto.getId());
+            if(userOpt.isPresent()) {
+                teamOpt.get().getUsers().add(userOpt.get());
+                userOpt.get().getTeams().add(teamOpt.get());
+                teamRepository.save(teamOpt.get());
+                userRepository.save(userOpt.get());
+            } else {
+                throw new IllegalArgumentException(
+                        MessageFormat.format(message.getUserNotExist(), userDto.getId()));
+            }
+        } else {
+            throw new IllegalArgumentException(
+                    MessageFormat.format(message.getTeamNotExist(), teamId));
+        }
+    }
+
+    @Override
+    public void removeUserFromTeam(String teamId, String userId) {
+        Optional<Team> teamOpt = teamRepository.findById(teamId);
+        if(teamOpt.isPresent()) {
+            // check user
+            Optional<User> userOpt = userRepository.findById(userId);
+            if(userOpt.isPresent()) {
+                teamOpt.get().getUsers().remove(userOpt.get());
+                userOpt.get().getTeams().remove(teamOpt.get());
+                teamRepository.save(teamOpt.get());
+                userRepository.save(userOpt.get());
+            } else {
+                throw new IllegalArgumentException(
+                        MessageFormat.format(message.getUserNotExist(), userId));
+            }
         } else {
             throw new IllegalArgumentException(
                     MessageFormat.format(message.getTeamNotExist(), teamId));

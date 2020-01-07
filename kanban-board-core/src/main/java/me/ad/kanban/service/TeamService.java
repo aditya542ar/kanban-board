@@ -21,4 +21,6 @@ public interface TeamService {
     void deleteTeamById(String id);
     void deleteTeams(List<String> idList);
     void deleteAllTeams();
+    void addUserToTeam(String teamId, UserDto userDto);
+    void removeUserFromTeam(String teamId, String userId);
 }

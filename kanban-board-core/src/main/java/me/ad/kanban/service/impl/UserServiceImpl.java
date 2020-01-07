@@ -107,6 +107,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Set<ProjectDto> findRelatedProjectsByUserId(String userId) {
+        Optional<User> userOpt = userRepository.findById(userId);
+        if(userOpt.isPresent()) {
+            Set<ProjectDto> projects = new HashSet<ProjectDto>();
+            userOpt.get().getTeams().forEach(
+                    (team) -> projects.add(mapperService.mapProjectToDto(team.getProject())));
+            userOpt.get().getOwnedProjects().forEach(
+                    (project) -> projects.add(mapperService.mapProjectToDto(project))
+            );
+            return projects;
+        }
+        throw new IllegalArgumentException(
+                MessageFormat.format(message.getUserNotExist(), userId));
+    }
+
+    @Override
     public Set<TaskDto> findTasksByUserId(String userId) {
         Optional<User> userOpt = userRepository.findById(userId);
         if(userOpt.isPresent()) {
@@ -119,7 +135,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto updateProjectById(String id, UserDto userDto) {
+    public UserDto updateUserById(String id, UserDto userDto) {
         if(id == null || userDto == null || !id.equals(userDto.getId())) {
             throw new IllegalArgumentException(message.getInvalidIdentifier());
         }

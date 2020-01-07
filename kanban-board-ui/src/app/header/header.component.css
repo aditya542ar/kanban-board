@@ -2,3 +2,10 @@
     text-decoration: underline;
     font-weight: bold;
 }
+
+.profile-pic {
+    height: 30px;
+    min-height: 30px;
+    max-height: 30px;
+    width: 30px;
+}

@@ -14,8 +14,11 @@ public class User extends BaseEntity {
     @Column
     private String lastName;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String userId;
+
+    @Column(nullable = false)
+    private String password;
 
     @ManyToMany(mappedBy = "users")
     private Set<Team> teams = new HashSet<>();
@@ -51,6 +54,14 @@ public class User extends BaseEntity {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public Set<Team> getTeams() {

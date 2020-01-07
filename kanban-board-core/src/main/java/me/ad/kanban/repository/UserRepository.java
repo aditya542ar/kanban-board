@@ -8,9 +8,13 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, String>, JpaSpecificationExecutor<User> {
+
+    Optional<User> findByUserId(String userId);
+
     static Specification<User> idSpec(String id) {
         return (userRoot, cq, cb) -> cb.equal(userRoot.get("id"), id);
     }

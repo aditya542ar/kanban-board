@@ -39,6 +39,12 @@ export class TaskService {
     return this.httpClient.post(this.baseApiUrl + this.taskBaseUrl, q);
   }
 
+  fetchAllTasksByTeamIds(teamIds:Array<string>):Observable<any> {
+    let q:TaskQuery = new TaskQuery();
+    q.teamIdIn = teamIds;
+    return this.httpClient.post(this.baseApiUrl + this.taskBaseUrl, q);
+  }
+
   fetchAllStagesByProjectId(pid:string):Observable<any> {
     let q:StageQuery = new StageQuery();
     q.projectId = pid;
@@ -65,5 +71,9 @@ export class TaskService {
 
   createNewTask(task:Task):Observable<any> {
     return this.httpClient.post(this.baseApiUrl + this.taskBaseUrl + "/create", task);
+  }
+
+  fetchTeamsByUserId(userId:string):Observable<any> {
+    return this.httpClient.get(this.baseApiUrl + this.userBaseUrl + "/" + userId + "/teams");
   }
 }

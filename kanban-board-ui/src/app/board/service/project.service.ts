@@ -30,10 +30,18 @@ export class ProjectService {
     return this.httpClient.get(this.baseApiUrl + this.projectBaseUrl);
   }
 
+  fetchAllProjectsByUserId(user:User): Observable<any>{
+    return this.httpClient.get(this.baseApiUrl + this.userBaseUrl + "/" + user.id + "/projects");
+  }
+
   fetchUserByIds(ids:Array<string>): Observable<any> {
     let q:UserQuery = new UserQuery();
     ids.forEach((id) => q.getIdIn().push(id));
     return this.httpClient.post(this.baseApiUrl + this.userBaseUrl, q);
+  }
+
+  fetchUsersByTeamId(id:string): Observable<any> {
+    return this.httpClient.get(this.baseApiUrl + this.teamBaseUrl + "/" + id + "/users");
   }
 
   fetchTeamsByProjectIds(ids:Array<string>): Observable<any> {
@@ -52,6 +60,10 @@ export class ProjectService {
     let q:TaskQuery = new TaskQuery();
     q.projectId = id;
     return this.httpClient.post(this.baseApiUrl + this.taskBaseUrl, q);
+  }
+
+  fetchUsersByProjectId(id:string): Observable<any> {
+    return this.httpClient.get(this.baseApiUrl + this.projectBaseUrl + "/" + id + "/users");
   }
 
   fetchTasksCountByProjectId(id:string): Observable<any> {
@@ -116,6 +128,14 @@ export class ProjectService {
 
   renameTeam(team:Team): Observable<any> {
     return this.httpClient.put(this.baseApiUrl + this.teamBaseUrl + "/" + team.id + "/update", team);
+  }
+
+  addUserToTeam(teamId:string, user:User): Observable<any> {
+    return this.httpClient.post(this.baseApiUrl + this.teamBaseUrl + "/" + teamId + "/users/add", user);
+  }
+
+  removeUserFromTeam(teamId:string, userId:string): Observable<any> {
+    return this.httpClient.delete(this.baseApiUrl + this.teamBaseUrl + "/" + teamId + "/users/" + userId + "/remove");
   }
 
 }

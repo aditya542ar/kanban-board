@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Configuration } from './configuration';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpBackend } from '@angular/common/http';
 
 import * as jsonConfig from "../../assets/config/config.json";
 
@@ -9,7 +9,11 @@ import * as jsonConfig from "../../assets/config/config.json";
 })
 export class ConfigService {
   private config: Configuration;
-  constructor(private http:HttpClient) { }
+  private http: HttpClient;
+
+  constructor( handler: HttpBackend) { 
+     this.http = new HttpClient(handler);
+  }
 
   load(url:string) {
     return new Promise((resolve) => {

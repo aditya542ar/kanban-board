@@ -1,0 +1,95 @@
+<div class="row d-flex justify-content-around">
+  <form name="registerForm" class="col-md-6">
+    <div class="card" [ngClass]="{'dummyBox box no-pointer': isSubmitted}">
+      <div class="card-header">
+        <strong>Register</strong>
+        <div class="text-right float-right">
+          Existing User ?
+          <button type="button" class="btn btn-sm btn-outline-primary ml-2"
+            [routerLink]="['/login']"
+            title="Existing User">
+              Login
+          </button>
+        </div>
+      </div>
+      <div class="card-body px-2 py-1">
+        <div class="alert alert-success" *ngIf="registerSuccess">
+          <strong>Success!</strong> {{message}}
+        </div>
+        <div class="alert alert-danger" *ngIf="registerFail">
+          <strong>Oopsss!!!</strong> {{message}}
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="input-group mb-3">
+              <div class="input-group-prepend col-md-4 px-0">
+                <span class="input-group-text" style="min-width: 100%;">User Id</span>
+              </div>
+              <input type="text" class="form-control" placeholder="UserId" name="userId" 
+              [(ngModel)]="user.userId"
+              (keyup)="validateUserId()">
+              <small class="form-text" *ngIf="user.invalidUserId" style="color: red;">
+                Invalid userId..!! Length must be between 4 to 20 & 
+                should only contain alpha-numeric characters and .(dot)
+              </small>
+            </div>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend col-md-4 px-0">
+                <span class="input-group-text" style="min-width: 100%;">First Name</span>
+              </div>
+              <input type="text" class="form-control" placeholder="First Name" name="firstName" 
+              [(ngModel)]="user.firstName"
+              (keyup)="validateFirstName()">
+              <small class="form-text" *ngIf="user.invalidFirstName" style="color: red;">
+                Invalid First Name..!! Length must be between 2 to 20 & 
+                should only contain alphabets and space
+              </small>
+            </div>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend col-md-4 px-0">
+                <span class="input-group-text" style="min-width: 100%;">Last Name</span>
+              </div>
+              <input type="text" class="form-control" placeholder="Last Name" name="lastName" 
+              [(ngModel)]="user.lastName"
+              (keyup)="validateLastName()">
+              <small class="form-text" *ngIf="user.invalidLastName" style="color: red;">
+                Invalid Last Name..!! Length must be between 2 to 20 & 
+                should only contain alphabets and space
+              </small>
+            </div>
+          
+            <div class="input-group mb-3">
+              <div class="input-group-prepend col-md-4 px-0">
+                <span class="input-group-text" style="min-width: 100%;">Password</span>
+              </div>
+              <input type="password" class="form-control" placeholder="Password" name="password" 
+              [(ngModel)]="user.password"
+              (keyup)="validatePassword()">
+              <p style="white-space: pre-wrap;margin: 0;"><small class="form-text" style="min-width: 100%; display: block;" *ngIf="user.invalidPassword" style="color: red;">
+                Invalid Password..!! Length must be between 4 to 100 characters
+              </small></p>
+            </div>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend col-md-4 px-0">
+                <span class="input-group-text" style="min-width: 100%;">Confirm Password</span>
+              </div>
+              <input type="password" class="form-control" placeholder="Password" name="password2" 
+              [(ngModel)]="user.password2"
+              (keyup)="validateConfirmPassword()">
+              <small class="form-text" *ngIf="user.mismatchPassword" style="color: red;">
+                Invalid Confirm Password..!! Confirm password must match with password
+              </small>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer text-right">
+        <button type="submit" class="btn btn-outline-success mr-3" 
+        *ngIf="validateForm()"
+        (click)="doRegister()">Register</button>
+        <button type="reset" class="btn btn-outline-danger"
+        (click)="resetForm()">Reset</button>
+      </div>
+    </div>
+  </form>
+</div>

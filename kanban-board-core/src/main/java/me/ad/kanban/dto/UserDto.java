@@ -8,6 +8,7 @@ public class UserDto extends BaseDto {
     private String firstName;
     private String lastName;
     private String userId;
+    private String password;
     private String profilePic;
 
     public String getFirstName() {
@@ -32,6 +33,14 @@ public class UserDto extends BaseDto {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getProfilePic() {

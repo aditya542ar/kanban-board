@@ -17,8 +17,9 @@ public interface UserService {
     UserDto saveOrUpdateUserByDto(UserDto userDto);
     Set<TeamDto> findTeamsByUserId(String userId);
     Set<ProjectDto> findOwnedProjectsByUserId(String userId);
+    Set<ProjectDto> findRelatedProjectsByUserId(String userId);
     Set<TaskDto> findTasksByUserId(String userId);
-    UserDto updateProjectById(String id, UserDto userDto);
+    UserDto updateUserById(String id, UserDto userDto);
     void deleteUserById(String id);
     void deleteUsers(List<String> idList);
     void deleteAllUsers();

@@ -19,6 +19,7 @@ import { UtilService } from 'src/app/util/util.service';
 export class ProjectComponent implements OnInit {
 
   private projectId:string;
+  public loggedInUser:User;
   public projectData:Project;
   public projectOwner:User;
   public projectTeams:Array<Team> = new Array<Team>();
@@ -73,6 +74,11 @@ export class ProjectComponent implements OnInit {
         this.navigateToProjectDetails(projectId);
       }
     );
+    this.utilService.gotLoggedInUser().subscribe(
+      (data) => {
+        this.loggedInUser = data.loggedInUser;
+      }
+    )
   }
 
   checkSubscriptionData() {
@@ -423,7 +429,7 @@ export class ProjectComponent implements OnInit {
   }
 
   private navigateToProjectList() {
-    this.router.navigateByUrl("/projectList");
+    this.router.navigateByUrl("/project-list");
   }
 
   private navigateToProjectDetails(projectId:string) {
