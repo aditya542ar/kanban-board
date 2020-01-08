@@ -1,6 +1,7 @@
 package me.ad.kanban.controller;
 
 import me.ad.kanban.dto.ErrorDto;
+import me.ad.kanban.exception.ForbiddenException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,4 +36,12 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex, ex,
                 new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
+
+    @ExceptionHandler(value = {ForbiddenException.class})
+    protected ResponseEntity<Object> handleForbiddenException(
+            RuntimeException ex, WebRequest request) {
+        return  handleExceptionInternal(ex, ex,
+                new HttpHeaders(), HttpStatus.FORBIDDEN, request);
+    }
+
 }

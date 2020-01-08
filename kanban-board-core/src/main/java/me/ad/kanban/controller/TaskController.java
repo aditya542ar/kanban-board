@@ -1,5 +1,6 @@
 package me.ad.kanban.controller;
 
+import me.ad.kanban.auth.AuthorizationService;
 import me.ad.kanban.config.CustomMessageProperties;
 import me.ad.kanban.dto.TaskDto;
 import me.ad.kanban.dto.query.TaskGetAllQueryDto;
@@ -9,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,11 +22,13 @@ public class TaskController {
     public static final Logger log = LoggerFactory.getLogger(TaskController.class);
     private final CustomMessageProperties message;
     private final TaskService taskService;
+    private final AuthorizationService authorizationService;
 
     @Autowired
-    public TaskController(CustomMessageProperties message, TaskService taskService) {
+    public TaskController(CustomMessageProperties message, TaskService taskService, AuthorizationService authorizationService) {
         this.message = message;
         this.taskService = taskService;
+        this.authorizationService = authorizationService;
     }
 
     @GetMapping(path = {"", "/", "/all"}, produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -52,13 +56,15 @@ public class TaskController {
     @PostMapping(path = "/create", consumes = {MediaType.APPLICATION_JSON_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseStatus(HttpStatus.CREATED)
-    public TaskDto createTask(@RequestBody TaskDto taskDto) {
+    public TaskDto createTask(@RequestBody TaskDto taskDto, Authentication auth) {
+        authorizationService.ensureAuthUserIsOwnerOfProject(auth, taskDto.getTeam().getProjectId());
         return taskService.saveOrUpdateTaskByDto(taskDto);
     }
 
     @PutMapping(path = "/{id}/update", consumes = {MediaType.APPLICATION_JSON_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE})
-    public TaskDto updateTaskById(@PathVariable("id") String id, @RequestBody TaskDto taskDto) {
+    public TaskDto updateTaskById(@PathVariable("id") String id, @RequestBody TaskDto taskDto, Authentication auth) {
+        authorizationService.ensureAuthUserIsOwnerOfTask(auth, id);
         return taskService.updateTaskById(id, taskDto);
     }
 
@@ -69,12 +75,14 @@ public class TaskController {
 
 
     @DeleteMapping(path = "/{id}")
-    public void deleteTaskById(@PathVariable("id") String id) {
+    public void deleteTaskById(@PathVariable("id") String id, Authentication auth) {
+        authorizationService.ensureAuthUserIsOwnerOfTask(auth, id);
         taskService.deleteTaskById(id);
     }
 
-    @DeleteMapping(path = "/{id}", consumes = {MediaType.APPLICATION_JSON_VALUE})
-    public void deleteTaskById(@RequestBody List<String> idList) {
+    @PostMapping(path = "/remove", consumes = {MediaType.APPLICATION_JSON_VALUE})
+    public void deleteTaskByIdList(@RequestBody List<String> idList, Authentication auth) {
+        idList.forEach((id) -> authorizationService.ensureAuthUserIsOwnerOfTask(auth, id));
         taskService.deleteTasks(idList);
     }
 

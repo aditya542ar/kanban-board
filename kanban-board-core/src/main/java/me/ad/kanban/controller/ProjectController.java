@@ -1,5 +1,6 @@
 package me.ad.kanban.controller;
 
+import me.ad.kanban.auth.AuthorizationService;
 import me.ad.kanban.config.CustomMessageProperties;
 import me.ad.kanban.dto.ProjectDto;
 import me.ad.kanban.dto.StageDto;
@@ -29,12 +30,14 @@ public class ProjectController {
     private final CustomMessageProperties message;
     private final MapperService mapperService;
     private final ProjectService projectService;
+    private final AuthorizationService authorizationService;
 
     @Autowired
-    public ProjectController(CustomMessageProperties message, MapperService mapperService, ProjectService projectService) {
+    public ProjectController(CustomMessageProperties message, MapperService mapperService, ProjectService projectService, AuthorizationService authorizationService) {
         this.message = message;
         this.mapperService = mapperService;
         this.projectService = projectService;
+        this.authorizationService = authorizationService;
     }
 
     @GetMapping(path = {"", "/", "/all"}, produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -95,17 +98,21 @@ public class ProjectController {
 
     @PutMapping(path = "/{id}/update", consumes = {MediaType.APPLICATION_JSON_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ProjectDto updateProject(@PathVariable("id") String id, @RequestBody ProjectDto projectDto) {
+    public ProjectDto updateProject(@PathVariable("id") String id, @RequestBody ProjectDto projectDto,
+        Authentication auth) {
+        authorizationService.ensureAuthUserIsOwnerOfProject(auth, id);
         return projectService.updateProjectById(id, projectDto);
     }
 
     @DeleteMapping(path = "/{id}")
-    public void deleteProjectById(@PathVariable("id") String id) {
+    public void deleteProjectById(@PathVariable("id") String id, Authentication auth) {
+        authorizationService.ensureAuthUserIsOwnerOfProject(auth, id);
         projectService.deleteProjectById(id);
     }
 
-    @DeleteMapping(path = "/remove", consumes = {MediaType.APPLICATION_JSON_VALUE})
-    public void deleteProjectByIdList(@RequestBody List<String> idList) {
+    @PostMapping(path = "/remove", consumes = {MediaType.APPLICATION_JSON_VALUE})
+    public void deleteProjectByIdList(@RequestBody List<String> idList, Authentication auth) {
+        idList.forEach((id) -> authorizationService.ensureAuthUserIsOwnerOfProject(auth, id));
         projectService.deleteProjects(idList);
     }
 
