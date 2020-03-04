@@ -263,12 +263,12 @@
   <div class="col-md-5">
     <div class="card mb-3 pb-0">
       <div class="card-header p-1 pl-1">
-        <strong>Manager Users</strong>
+        <strong>Manage Users</strong>
         <div class="text-right float-right">
           <button  type="button" class="btn btn-sm btn-outline-primary ml-2"
             [routerLink]="['user-list']"
             *ngIf="!(isAddStage || isAddingStage || isRenameStage || isRemovingStage || isRenamingStage || isRenameStage) && loggedInUser.id == projectData.ownerId"
-            title="Manager Users">
+            title="Manage Users">
             <i class="fa fa-link"></i>
           </button>
         </div>

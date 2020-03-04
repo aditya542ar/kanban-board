@@ -34,7 +34,9 @@ jwt:
 # messages
 message:
   projectNotExist: "Project with ID: ''{0}'' doesn''t exist."
+  projectAlreadyExist: "Project with name: ''{0}'' already exist."
   userNotExist: "User with ID: ''{0}'' doesn''t exist."
+  userAlreadyExist: "User with userId: ''{0}'' already exist."
   teamNotExist: "Team with ID: ''{0}'' doesn''t exist."
   invalidLikeFilterCriteria: "''Like'' filter criteria with param ''{0}'' should contains ''%''"
   invalidDateFilterCriteria: "''Date'' filter criteria with param ''{0}'' should be in YYYY-MM-DD format"

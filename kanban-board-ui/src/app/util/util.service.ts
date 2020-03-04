@@ -17,8 +17,28 @@ export class UtilService {
   private gotProjectAndLoggedInUser$:EventEmitter<any> = new EventEmitter<any>();
   private currentProjectChanged$:EventEmitter<string> = new EventEmitter<string>();
   private loggedInUserSet$:EventEmitter<string> = new EventEmitter<string>();
+  
+  // flag for spinner
+  private spinner:boolean = true;
 
   constructor() { }
+
+  // getter & setter for spinner
+  showSpinner() {
+    setTimeout(() => {
+      this.spinner = true;
+    }, 10);
+  }
+
+  hideSpinner() {
+    setTimeout(() => {
+      this.spinner = false;
+    }, 10);
+  }
+
+  isSpinner() {
+    return this.spinner;
+  }
 
   showProjectDropDown():void {
     this.isShowProjectDropDownFlag = true;

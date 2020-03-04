@@ -77,7 +77,16 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public ProjectDto saveOrUpdateProjectByDto(ProjectDto projectDto) {
+    public ProjectDto createProject(ProjectDto projectDto) {
+        Optional<Project> pOpt = projectRepository.findByName(projectDto.getName());
+        if(pOpt.isPresent()) {
+            throw new IllegalArgumentException(
+                    MessageFormat.format(message.getProjectAlreadyExist(), projectDto.getName()));
+        }
+        return saveOrUpdateProjectByDto(projectDto);
+    }
+
+    private ProjectDto saveOrUpdateProjectByDto(ProjectDto projectDto) {
         return mapperService.mapProjectToDto(
                 projectRepository.save(
                         mapperService.mapDtoToProject(projectDto)));

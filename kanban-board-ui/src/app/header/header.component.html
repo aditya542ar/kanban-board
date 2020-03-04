@@ -34,11 +34,11 @@
             <ul class="navbar-nav">
               <li class="nav-item dropdown" *ngIf="util.getLoggedInUser()">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <img src="{{util.getLoggedInUser().profilePic}}" class="rounded float-left img-thumbnail profile-pic" 
+                  <img src="{{util.getLoggedInUser().profilePic}}" class="rounded float-left img-thumbnail profile-pic p-0" 
                     alt="{{util.getLoggedInUser().userId}}" />
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                  <a class="dropdown-item" href="#">Profile ({{util.getLoggedInUser().userId}})</a>
+                  <a class="dropdown-item" href="javascript:void(0)" [routerLink]="['/profile']">Profile ({{util.getLoggedInUser().userId}})</a>
                   <a class="dropdown-item" href="javascript:void(0)" (click)="doLogout()">Logout</a>
                 </div>
               </li>

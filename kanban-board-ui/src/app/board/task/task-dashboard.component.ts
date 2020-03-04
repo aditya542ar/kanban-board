@@ -132,12 +132,14 @@ export class TaskDashboardComponent implements OnInit {
 
   ngOnInit() {
     // Show Project Drop down in header
+    this.utilService.showSpinner();
     this.utilService.showProjectDropDown();
     this.utilService.currPage = "task-dashboard";
     this.checkSubscriptionData();
     this.utilService.listenToCurrentProjectChanged()
     .subscribe(
       (projectId) => {
+        this.utilService.showSpinner();
         this.loadAllTasksByProjectAndUser(projectId, this.utilService.getLoggedInUser());
       }
     );
@@ -156,6 +158,7 @@ export class TaskDashboardComponent implements OnInit {
           console.log("loadTasks Case");
           if(this.gotTaskData && this.gotTeamData && this.gotStageData && this.gotUserData) {
             this.showTasks = true;
+            this.utilService.hideSpinner();
           }
           console.log("showTasks", this.showTasks);
       }
@@ -188,56 +191,67 @@ export class TaskDashboardComponent implements OnInit {
   }
 
   loadAllTasksByProjectAndUser(projectId:string, loggedInUser:User) {
-    // let projectId:string = this.utilService.currProject;
-    // let loggedInUser:User = this.utilService.getLoggedInUser();
-    console.log("projectId", projectId, "loggedInUser", loggedInUser);
-    console.log("currSearchBy", this.currSearchBy, "currSortBy", this.currSortBy);
     // Reset all data before loading a new project tasks
     this.resetAllDataBeforeLoading();
-    this.taskService.fetchTeamsByUserId(loggedInUser.id).subscribe(
-      (teams:Array<Team>) => {
-        this.allTeams = teams;
-        this.gotTeamData = true;
-        this.gotSubscriptionData$.emit(new EmitAction("loadTasks", true));
-        let c:number = 0;
-        this.allTeams.forEach(
-          (team:Team) => {
-            this.taskService.fetchUsersByTeamId(team.id).subscribe(
-              (users:Array<User>) => {
-                c++;
-                team["users"] = users;
-                users.forEach((user:User) => {
-                  this.allUsers = this.allUsers || new Array<User>();
-                  if(this.allUsers.indexOf(user) == -1) 
-                    this.allUsers.push(user);
-                });
-                if(c == this.allTeams.length) {
-                  console.log("allUsers", this.allUsers);
-                  this.gotUserData = true;
-                  this.gotSubscriptionData$.emit(new EmitAction("loadTasks", true));
-                }
+    try {
+      // fetch teams for logged in user
+      this.taskService.fetchTeamsByUserId(loggedInUser.id).subscribe(
+        (teams:Array<Team>) => {
+          this.allTeams = teams;
+          this.gotTeamData = true;
+          this.gotSubscriptionData$.emit(new EmitAction("loadTasks", true));
+          let c:number = 0;
+
+          // fetch users for each team
+          this.allTeams.forEach(
+            (team:Team) => {
+              this.taskService.fetchUsersByTeamId(team.id).subscribe(
+                (users:Array<User>) => {
+                  c++;
+                  team["users"] = users;
+                  users.forEach((user:User) => {
+                    this.allUsers = this.allUsers || new Array<User>();
+                    if(this.allUsers.indexOf(user) == -1) 
+                      this.allUsers.push(user);
+                  });
+                  if(c == this.allTeams.length) {
+                    console.log("allUsers", this.allUsers);
+                    this.gotUserData = true;
+                    this.gotSubscriptionData$.emit(new EmitAction("loadTasks", true));
+                  }
+              }, (err) => {
+                throw err;
+              });
+          });
+          
+          let teamIds:Array<string> = this.allTeams.map((t) => t.id);
+
+          // fetch tasks for all teams
+          this.taskService.fetchAllTasksByTeamIds(teamIds)
+          .subscribe(
+            (tasks:Array<Task>) => {
+              this.allTasks = tasks;
+              this.gotTaskData = true;
+              this.gotSubscriptionData$.emit(new EmitAction("loadTasks", true));
+
+              // fetch all stages of project
+              this.fetchAllStagesByProjectId(projectId);
+            }, (err) => {
+              throw err;
             });
+        }, (err) => {
+          throw err;
         });
-        
-        let teamIds:Array<string> = this.allTeams.map((t) => t.id);
-        this.taskService.fetchAllTasksByTeamIds(teamIds)
-        .subscribe(
-          (tasks:Array<Task>) => {
-            this.allTasks = tasks;
-            this.gotTaskData = true;
-            this.gotSubscriptionData$.emit(new EmitAction("loadTasks", true));
-            this.fetchAllStagesByProjectId(projectId);
-          }, (err) => {
-            this.modal.name = "msgModal";
-            this.modal.body = {
-              "status": "fail",
-              "data": "Unable to load Tasks. Please try again later...!!"
-            };
-            this.showModal(this.modal);
-          }
-        );
-      }
-    )
+
+    } catch (error) {
+      this.modal.name = "msgModal";
+      this.modal.body = {
+        "status": "fail",
+        "data": "Unable to load Tasks. Please try again later...!!"
+      };
+      this.utilService.hideSpinner();
+      this.showModal(this.modal);
+    }
     //this.taskService.fetchAllTasksByProjectIdAndOwnerId(projectId, loggedInUser.id)
     //this.taskService.fetchAllTasksByProjectId(projectId)
     
@@ -258,6 +272,8 @@ export class TaskDashboardComponent implements OnInit {
           console.log("task", task);
         });
 
+      }, (err) => {
+        throw err;
       });
   }
 
@@ -319,6 +335,7 @@ export class TaskDashboardComponent implements OnInit {
   }
 
   saveEditTask() {
+    this.utilService.showSpinner();
     console.log(this.currTask);
     console.log("new Task", new Task(this.currTask));
     if(this.isNewTask) {
@@ -341,6 +358,7 @@ export class TaskDashboardComponent implements OnInit {
         });
         setTimeout(() => {
           this.isSavingTask = false;
+          this.utilService.hideSpinner();
         }, 3000);
         console.log("allTask:", this.allTasks);
       }, (err) => {
@@ -350,6 +368,7 @@ export class TaskDashboardComponent implements OnInit {
           "data": "Unable to edit Task. Please try again later...!!"
         };
         this.isSavingTask = false;
+        this.utilService.hideSpinner();
         this.showModal(this.modal);
       });
   }
@@ -370,6 +389,7 @@ export class TaskDashboardComponent implements OnInit {
   }
 
   deleteTask(task:Task) {
+    this.utilService.showSpinner();
     this.currTask = new Task(task);
     this.isSavingTask = true;
     this.hideModal();
@@ -385,6 +405,7 @@ export class TaskDashboardComponent implements OnInit {
             return true;
           });
           this.isSavingTask = false;
+          this.utilService.hideSpinner();
         }, 3000);
         console.log("allTask:", this.allTasks);
       }, (err) => {
@@ -394,6 +415,7 @@ export class TaskDashboardComponent implements OnInit {
           "data": "Unable to delete Task. Please try again later...!!"
         };
         this.isSavingTask = false;
+        this.utilService.hideSpinner();
         this.showModal(this.modal);
       });
   }
@@ -410,6 +432,7 @@ export class TaskDashboardComponent implements OnInit {
   }
 
   saveNewTask() {
+    this.utilService.showSpinner();
     console.log(this.currTask);
     console.log("new Task", new Task(this.currTask));
     this.isSavingTask = true;
@@ -422,6 +445,7 @@ export class TaskDashboardComponent implements OnInit {
           this.allTasks.push(task);
           this.isSavingTask = false;
           this.isNewTask = false;
+          this.utilService.hideSpinner();
         }, 3000);
         console.log("allTask:", this.allTasks);
       }, (err) => {
@@ -432,6 +456,7 @@ export class TaskDashboardComponent implements OnInit {
         };
         this.isSavingTask = false;
         this.isNewTask = false;
+        this.utilService.hideSpinner();
         this.showModal(this.modal);
       });
   }

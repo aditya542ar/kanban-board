@@ -10,3 +10,65 @@ app-header {
     min-height: calc(100% - 60px);
     max-height: calc(100% - 60px);
 }
+
+.dummyBox {
+    opacity: 0.7;
+    animation-name: loadDummyBox;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+    -webkit-animation-name: loadDummyBox;
+    -webkit-animation-duration: 2s;
+    -webkit-animation-iteration-count: infinite;
+    -moz-animation-name: loadDummyBox;
+    -moz-animation-duration: 2s;
+    -moz-animation-iteration-count: infinite;
+    -o-animation-name: loadDummyBox;
+    -o-animation-duration: 2s;
+    -o-animation-iteration-count: infinite;
+}
+.box {
+    background-color: #ffffff;
+    background-image: linear-gradient(315deg, #ffffff 0%, #d7e1ec 74%);
+}
+
+.no-pointer {
+    pointer-events: none;
+}
+
+@keyframes loadDummyBox {
+    from { opacity: 0.7; }
+    to { opacity: 0.3; }
+}
+@-webkit-keyframes loadDummyBox {
+    from { opacity: 0.7; }
+    to { opacity: 0.3; }
+}
+@-o-keyframes loadDummyBox {
+    from { opacity: 0.7; }
+    to { opacity: 0.3; }
+}
+@-moz-keyframes loadDummyBox {
+    from { opacity: 0.7; }
+    to { opacity: 0.3; }
+}
+
+.spinnerBox {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: 1080;
+    background-color: black;
+    opacity: 0.8;
+    padding-top: 45vh;
+}
+
+.spinner {
+    height: 10vh;
+}
+
+.spinner .spinner-grow {
+    width: 5rem; 
+    height: 5rem;
+}

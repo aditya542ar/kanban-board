@@ -7,11 +7,13 @@ import { LoginComponent } from './auth/login/login.component';
 import { AuthGaurdService } from './auth/auth-gaurd.service';
 import { RegisterComponent } from './auth/register/register.component';
 import { TeamComponent } from './board/team/team.component';
+import { ProfileComponent } from './auth/profile/profile.component';
 
 const routes: Routes = [
   {path: '' , pathMatch: "full", redirectTo: "project-list", canActivate: [AuthGaurdService]},
   {path: 'login' , pathMatch: "full", component: LoginComponent},
   {path: 'register' , pathMatch: "full", component: RegisterComponent},
+  {path: 'profile' , pathMatch: "full", component: ProfileComponent, canActivate: [AuthGaurdService]},
   {path: 'project-list' , pathMatch: "full", component: ProjectListComponent, canActivate: [AuthGaurdService]},
   {path: 'project/:id' , component: ProjectComponent, canActivate: [AuthGaurdService]},
   {path: 'project/:id/user-list' , component: TeamComponent, canActivate: [AuthGaurdService]},

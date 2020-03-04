@@ -17,6 +17,7 @@ import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.text.MessageFormat;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -76,7 +77,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto saveOrUpdateUserByDto(UserDto userDto) {
+    public UserDto createUserByDto(UserDto userDto) {
+        Optional<User> userOpt = userRepository.findByUserId(userDto.getUserId());
+        if(userOpt.isPresent()) {
+            throw new IllegalArgumentException(
+                    MessageFormat.format(message.getUserAlreadyExist(), userDto.getUserId()));
+        }
+        return saveOrUpdateUserByDto(userDto);
+    }
+
+    private UserDto saveOrUpdateUserByDto(UserDto userDto) {
         return mapperService.mapUserToDto(
                 userRepository.save(
                         mapperService.mapDtoToUser(userDto)));
@@ -135,12 +145,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto updateUserById(String id, UserDto userDto) {
+    @Transactional
+    public void updateUserById(String id, UserDto userDto) {
         if(id == null || userDto == null || !id.equals(userDto.getId())) {
             throw new IllegalArgumentException(message.getInvalidIdentifier());
         }
         if(userRepository.existsById(id)) {
-            return saveOrUpdateUserByDto(userDto);
+            User dbUser = userRepository.findById(id).get();
+            byte[] profilePic = (userDto.getProfilePic() == null) ? dbUser.getProfilePic() : userDto.getProfilePic().getBytes();
+            if(userDto.getPassword() == null) {
+                userRepository.updateUserDetail(userDto.getId(), userDto.getFirstName(),
+                        userDto.getLastName(), profilePic);
+            } else {
+                User user = mapperService.mapDtoToUser(userDto);
+                userRepository.updatePassword(userDto.getId(), user.getPassword());
+            }
         } else {
             throw new NoSuchElementException(MessageFormat.format(message.getUserNotExist(), id));
         }

@@ -8,10 +8,12 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
 @Repository
 public interface ProjectRepository extends JpaRepository<Project, String>, JpaSpecificationExecutor<Project> {
 
+    Optional<Project> findByName(String name);
 
     // criteria specification
     static Specification<Project> nameLikeSpec(String nameLike) {

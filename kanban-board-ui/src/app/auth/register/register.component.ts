@@ -15,24 +15,24 @@ export class RegisterComponent implements OnInit {
   message:string = "";
   registerSuccess:boolean = false;
   registerFail:boolean = false;
-  isSubmitted = false;
   constructor(private auth:AuthService, private router:Router, private util:UtilService) { }
 
   ngOnInit() {
     this.resetForm();
     this.util.hideProjectDropDown();
     this.util.currPage = "register";
+    this.util.hideSpinner();
   }
 
   doRegister() {
     // this.isSubmitted = true;
+    this.util.showSpinner();
     this.validateUserId();
     this.validateFirstName();
     this.validateLastName();
     this.validatePassword();
     this.validateConfirmPassword();
     if(this.validateForm()) {
-      this.isSubmitted = true;
       this.registerSuccess = false;
       this.registerFail = false;
       let newUser:User = new User(this.user);
@@ -41,25 +41,27 @@ export class RegisterComponent implements OnInit {
         (user:User) => {
           this.registerSuccess = true;
           this.message = "User registered successfully..";
+          this.util.hideSpinner();
           setTimeout(() => {
             this.router.navigate(["/login"]);
           }, 3000);
         }, (err) => {
           console.log(err);
+          if(err.status === 400)
+            this.message = err.error.message;
+          else
+            this.message = "Unable to register user.. Please try again later with valid data..";
           setTimeout(() => {
             this.registerFail = true;
-            this.message = "Unable to register user.. Please try again later with valid data..";
-            console.log("isSubmitted", this.isSubmitted, "registerSuccess", this.registerSuccess
-            , (this.isSubmitted && !this.registerSuccess));
-            this.isSubmitted = false;
-          }, 10000);
+            this.util.hideSpinner();
+          }, 3000);
         }
       );
     } else {
       console.log("Invalid Form Data submitted");
       this.registerFail = true;
-      this.message = "Invalid Form data submitted.. Please try again later with valid data..";
-      this.isSubmitted = false;
+      this.message = "Invalid Form data submitted.. Please try again with valid data..";
+      this.util.hideSpinner();
     }
     
   }
@@ -113,7 +115,7 @@ export class RegisterComponent implements OnInit {
   validateForm():boolean {
     if(this.user["invalidPassword"] || this.user["mismatchPassword"] 
       || this.user["invalidUserId"] || this.user["invalidFirstName"]
-      || this.user["invalidLastName"] || this.isSubmitted) {
+      || this.user["invalidLastName"]) {
         return false;
     } else {
       return true;
@@ -121,7 +123,6 @@ export class RegisterComponent implements OnInit {
   }
 
   resetForm() {
-    this.isSubmitted = false;
     this.registerSuccess = false;
     this.registerFail = false;
     this.user = new User();

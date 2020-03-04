@@ -32,6 +32,11 @@ export class AuthService {
     return this.httpClient.post(this.baseApiUrl + this.authBaseUrl, req);
   }
 
+  updateUser(user:User) {
+    user.password = (!!user.password) ? btoa(user.password) : undefined;
+    return this.httpClient.put(this.baseApiUrl + this.userBaseUrl + "/" + user.id + "/update", user);
+  }
+
   revalidateUser(token:string) {
     return this.httpClient.post(this.baseApiUrl + this.revalidateBaseUrl, token);
   }

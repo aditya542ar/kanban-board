@@ -6,14 +6,14 @@
           SearchBy: {{currSearchByStr}}
         </button>
         <div class="dropdown-menu">
-          <a class="dropdown-item" [ngClass]="{'active':currSearchBy == sb.value}" 
+          <a class="dropdown-item" [ngClass]="{'active':currSearchBy == sb.value}"
           href="javascript:void(0)"
           *ngFor="let sb of searchByMap | keyvalue"
           (click)="currSearchBy = sb.value; currSearchByStr = sb.key"
           >{{sb.key}}</a>
         </div>
       </div>
-      <input type="text" class="form-control border border-secondary" placeholder="Search project..." 
+      <input type="text" class="form-control border border-secondary" placeholder="Search task..."
       name="searchString"
       [(ngModel)]="searchString">
     </div>
@@ -26,7 +26,7 @@
           SortBy: {{currSortByStr}}
         </button>
         <div class="dropdown-menu" style="min-width: 60%;">
-          <a class="dropdown-item" [ngClass]="{'active':currSortBy == sb.value}" 
+          <a class="dropdown-item" [ngClass]="{'active':currSortBy == sb.value}"
           href="javascript:void(0)"
           *ngFor="let sb of sortByMap | keyvalue"
           (click)="currSortBy = sb.value; currSortByStr = sb.key"
@@ -54,10 +54,10 @@
         Category: {{currStage.name ? currStage.name : "All Category"}}
       </button>
       <div class="dropdown-menu" style="min-width: 100%;">
-        <a class="dropdown-item" 
+        <a class="dropdown-item"
         href="javascript:void(0)"
         (click)="setCurrStage(allStageFilter)">All Category</a>
-        <a class="dropdown-item" 
+        <a class="dropdown-item"
         href="javascript:void(0)"
         *ngFor="let stage of allStages"
         (click)="setCurrStage(stage)">{{stage.name}}</a>
@@ -74,9 +74,9 @@
 <div class="row" *ngIf="showTasks">
   <div class="col-md-1"></div>
   <div class="col-md-10">
-    <div class="alert alert-info" *ngIf="showTasks && ((!!allTasks) ? allTasks : [] 
-    | taskSearch: 'category.name': (!!currStage) ? currStage.name : ' ' 
-    | taskSearch: currSearchBy: searchString 
+    <div class="alert alert-info" *ngIf="showTasks && ((!!allTasks) ? allTasks : []
+    | taskSearch: 'category.name': (!!currStage) ? currStage.name : ' '
+    | taskSearch: currSearchBy: searchString
     | taskSort: currSortBy: currSortOrder).length == 0">
       No Task Available with matching criteria..!!
     </div>
@@ -87,9 +87,9 @@
   <div class="col-md-1"></div>
 </div>
 <div class="row d-flex justify-content-around" *ngIf="showTasks">
-  <div class="col-md-4 px-2" *ngFor="let task of allTasks 
-          | taskSearch: 'category.name': currStage.name 
-          | taskSearch: currSearchBy: searchString 
+  <div class="col-md-4 px-2" *ngFor="let task of allTasks
+          | taskSearch: 'category.name': currStage.name
+          | taskSearch: currSearchBy: searchString
           | taskSort: currSortBy: currSortOrder">
     <!-- | taskSearch: currSearchBy: searchString | taskSort: currSortBy: currSortOrder -->
     <div class="card mb-3 pb-1" [ngClass]="{'dummyBox box no-pointer': currTask.id == task.id && isSavingTask}">
@@ -112,14 +112,14 @@
         </div>
         <div class="row mx-0">
           <div class="col-md-5 pl-0 mt-1" title="Team">
-            <span class="badge badge-pill badge-primary text-left" 
+            <span class="badge badge-pill badge-primary text-left"
             style="min-width: 100%; max-width: 100%; width: 100%; line-height: 1.5em;">
             {{task.team.name}}
           </span>
           </div>
           <!-- <div class="col-md-1"></div> -->
           <div class="col-md-6 pl-0 mt-1" title="Start Date Time">
-            <span class="badge badge-pill badge-success" 
+            <span class="badge badge-pill badge-success"
             style="min-width: 100%; max-width: 100%; width: 100%; line-height: 1.5em;">
               {{task[task.category.id].startTime ? task[task.category.id].startTime : "-NA-"}}
             </span>
@@ -135,14 +135,14 @@
         </div>
         <div class="row mx-0">
           <div class="col-md-5 pl-0 mt-1" title="Category">
-            <span class="badge badge-pill badge-info text-left" 
+            <span class="badge badge-pill badge-info text-left"
             style="min-width: 100%; max-width: 100%; width: 100%; line-height: 1.5em;">
               {{task.category.name}}
             </span>
           </div>
           <!-- <div class="col-md-1"></div> -->
           <!-- <div class="col-md-6 pl-0 mt-1" title="End Date Time">
-            <span class="badge badge-pill badge-danger" 
+            <span class="badge badge-pill badge-danger"
             style="min-width: 100%; max-width: 100%; width: 100%; line-height: 1.5em;">
             {{task[task.category.id].endTime ? task[task.category.id].endTime : "-NA-"}}
             </span>
@@ -160,16 +160,16 @@
         </div>
         <div class="row mx-0">
           <div class="col-md-2 pl-0 mt-1" title="Priority">
-            <span class="badge badge-pill badge-secondary" 
+            <span class="badge badge-pill badge-secondary"
             style="min-width: 100%; line-height: 1.5em;">
               P{{task.priority}}
             </span>
           </div>
           <div class="col-md-4"></div>
           <div class="col-md-5 pl-0 mt-1" title="Owner">
-            <span class="badge badge-pill badge-warning text-left ownerId" 
+            <span class="badge badge-pill badge-warning text-left ownerId"
               style="min-width: 100%; max-width: 100%; width: 100%; line-height: 1.5em;">
-              {{task.owner.userId}} 
+              {{task.owner.userId}}
               {{(task.owner.lastName || task.owner.firstName) ? " - " : ""}}
               {{task.owner.lastName ? task.owner.lastName + ", " : ""}}
               {{task.owner.firstName ? task.owner.firstName : ""}}
@@ -203,7 +203,7 @@
       <!-- Modal Header -->
       <div class="modal-header">
         <h4 class="modal-title">{{modal.header}}</h4>
-        <!-- <button type="button" class="close" 
+        <!-- <button type="button" class="close"
         data-dismiss="modal"
         (click)="hideModal(modal)">&times;</button> -->
       </div>
@@ -222,7 +222,7 @@
 
       <!-- Modal footer -->
       <div class="modal-footer p-0">
-        <button type="button" class="btn btn-danger" 
+        <button type="button" class="btn btn-danger"
         data-dismiss="modal"
         (click)="hideModal()">Close</button>
       </div>
@@ -239,7 +239,7 @@
       <!-- Modal Header -->
       <div class="modal-header">
         <h4 class="modal-title">Task Details</h4>
-        <!-- <button type="button" class="close" 
+        <!-- <button type="button" class="close"
         data-dismiss="modal"
         (click)="hideModal(modal)">&times;</button> -->
       </div>
@@ -263,7 +263,7 @@
         <div class="form-group">
           <label for="endDate"><strong>Owner:</strong></label>
           <span class="form-control">
-            {{currTask.owner.userId}} 
+            {{currTask.owner.userId}}
             {{(currTask.owner.lastName || currTask.owner.firstName) ? " - " : ""}}
             {{currTask.owner.lastName ? currTask.owner.lastName + ", " : ""}}
             {{currTask.owner.firstName ? currTask.owner.firstName : ""}}
@@ -291,7 +291,7 @@
                   <div class="form-control" name="changeHistory">
                     <small class="d-flex justify-content-around">
                       <strong>{{tsc.stage.name}}</strong>
-                      <span><strong>Start: </strong>{{tsc.startTime ? tsc.startTime : "-NA-"}}</span> 
+                      <span><strong>Start: </strong>{{tsc.startTime ? tsc.startTime : "-NA-"}}</span>
                       <span><strong>End: </strong>{{tsc.endTime ? tsc.endTime : "-NA-"}}</span>
                     </small>
                   </div>
@@ -304,7 +304,7 @@
 
       <!-- Modal footer -->
       <div class="modal-footer p-0">
-        <button type="button" class="btn btn-danger" 
+        <button type="button" class="btn btn-danger"
         data-dismiss="modal"
         (click)="hideModal()">Close</button>
       </div>
@@ -322,7 +322,7 @@
       <div class="modal-header">
         <h4 class="modal-title" *ngIf="!isNewTask">Edit Task {{currTask.name}}</h4>
         <h4 class="modal-title" *ngIf="isNewTask">New Task {{currTask.name}}</h4>
-        <!-- <button type="button" class="close" 
+        <!-- <button type="button" class="close"
         data-dismiss="modal"
         (click)="hideModal(modal)">&times;</button> -->
       </div>
@@ -345,7 +345,7 @@
           <label for="priority"><strong>Priority:</strong></label>
           <input type="number" class="form-control" id="priority" name="priority"
             min="0" max="100"
-            (keypress)="isNumber($event)" 
+            (keypress)="isNumber($event)"
             (keyup)="checkPriority(currTask)"
             [(ngModel)]="currTask.priority" />
         </div>
@@ -353,18 +353,18 @@
           <div class="input-group mt-2 mb-3" *ngIf="!isNewTask">
             <button type="button" class="btn btn-outline-info dropdown-toggle border border-info" data-toggle="dropdown"
             style="min-width: 100%;">
-              Owner: {{currTask.owner.userId}} 
+              Owner: {{currTask.owner.userId}}
                 {{(currTask.owner.lastName || currTask.owner.firstName) ? " - " : ""}}
                 {{currTask.owner.lastName ? currTask.owner.lastName + ", " : ""}}
                 {{currTask.owner.firstName ? currTask.owner.firstName : ""}}
             </button>
             <div class="dropdown-menu" style="min-width: 100%;">
-              <a class="dropdown-item" *ngFor="let user of allUsers" 
+              <a class="dropdown-item" *ngFor="let user of allUsers"
               [ngClass]="{'active': currTask.owner.id == user.id}"
               [style.display]="currTask.owner.id != user.id ? 'block' : 'none'"
               href="javascript:void(0)"
               (click)="currTask.owner = user">
-                {{user.userId}} 
+                {{user.userId}}
                 {{(user.lastName || user.firstName) ? " - " : ""}}
                 {{user.lastName ? user.lastName + ", " : ""}}
                 {{user.firstName ? user.firstName : ""}}
@@ -374,7 +374,7 @@
           <div class="input-group mt-2 mb-3" *ngIf="isNewTask">
             <button type="button" class="btn btn-outline-info border border-info"
             style="min-width: 100%;">
-              Owner: {{currTask.owner.userId}} 
+              Owner: {{currTask.owner.userId}}
                 {{(currTask.owner.lastName || currTask.owner.firstName) ? " - " : ""}}
                 {{currTask.owner.lastName ? currTask.owner.lastName + ", " : ""}}
                 {{currTask.owner.firstName ? currTask.owner.firstName : ""}}
@@ -388,7 +388,7 @@
               Team: {{currTask.team.name}}
             </button>
             <div class="dropdown-menu" style="min-width: 100%;">
-              <a class="dropdown-item" *ngFor="let team of allTeams" 
+              <a class="dropdown-item" *ngFor="let team of allTeams"
               [ngClass]="{'active': currTask.team.id == team.id}"
               [style.display]="currTask.team.id != team.id ? 'block' : 'none'"
               href="javascript:void(0)"
@@ -403,7 +403,7 @@
               Category: {{currTask.category.name}}
             </button>
             <div class="dropdown-menu" style="min-width: 100%;">
-              <a class="dropdown-item" *ngFor="let stage of allStages" 
+              <a class="dropdown-item" *ngFor="let stage of allStages"
               [ngClass]="{'active': currTask.category.id == stage.id}"
               [style.display]="currTask.category.id != stage.id ? 'block' : 'none'"
               href="javascript:void(0)"
@@ -415,10 +415,10 @@
 
       <!-- Modal footer -->
       <div class="modal-footer p-0">
-        <button type="button" class="btn btn-outline-danger" 
+        <button type="button" class="btn btn-outline-danger"
         data-dismiss="modal"
         (click)="saveEditTask()">Save</button>
-        <button type="button" class="btn btn-outline-success" 
+        <button type="button" class="btn btn-outline-success"
         data-dismiss="modal"
         (click)="cancelEditTask()">Close</button>
       </div>
@@ -435,7 +435,7 @@
       <!-- Modal Header -->
       <div class="modal-header">
         <h4 class="modal-title">Move Task {{currTask.name}}</h4>
-        <!-- <button type="button" class="close" 
+        <!-- <button type="button" class="close"
         data-dismiss="modal"
         (click)="hideModal(modal)">&times;</button> -->
       </div>
@@ -454,7 +454,7 @@
               Category: {{currTask.category.name}}
             </button>
             <div class="dropdown-menu" style="min-width: 100%;">
-              <a class="dropdown-item" *ngFor="let stage of allStages" 
+              <a class="dropdown-item" *ngFor="let stage of allStages"
               [ngClass]="{'active': currTask.category.id == stage.id}"
               [style.display]="currTask.category.id != stage.id ? 'block' : 'none'"
               href="javascript:void(0)"
@@ -466,11 +466,11 @@
 
       <!-- Modal footer -->
       <div class="modal-footer p-0">
-        <button type="button" class="btn btn-outline-danger" 
+        <button type="button" class="btn btn-outline-danger"
         data-dismiss="modal"
         *ngIf="currTask.category.id != modal.body.id"
         (click)="saveEditTask()">Save</button>
-        <button type="button" class="btn btn-outline-success" 
+        <button type="button" class="btn btn-outline-success"
         data-dismiss="modal"
         (click)="cancelEditTask()">Close</button>
       </div>

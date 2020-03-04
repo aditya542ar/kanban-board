@@ -14,12 +14,12 @@ public interface UserService {
     UserDto findUserById(String id);
     List<UserDto> findAllUsersWithFilterQuery(Optional<UserGetAllQueryDto> queryDtoOpt);
     Long findTotalCount(Optional<UserGetAllQueryDto> queryDtoOpt);
-    UserDto saveOrUpdateUserByDto(UserDto userDto);
+    UserDto createUserByDto(UserDto userDto);
     Set<TeamDto> findTeamsByUserId(String userId);
     Set<ProjectDto> findOwnedProjectsByUserId(String userId);
     Set<ProjectDto> findRelatedProjectsByUserId(String userId);
     Set<TaskDto> findTasksByUserId(String userId);
-    UserDto updateUserById(String id, UserDto userDto);
+    void updateUserById(String id, UserDto userDto);
     void deleteUserById(String id);
     void deleteUsers(List<String> idList);
     void deleteAllUsers();

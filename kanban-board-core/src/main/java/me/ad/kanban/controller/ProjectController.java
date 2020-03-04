@@ -69,7 +69,7 @@ public class ProjectController {
     @ResponseStatus(HttpStatus.CREATED)
     public ProjectDto createProject(@RequestBody ProjectDto projectDto) {
         log.info("CreateProject request received.");
-        return projectService.saveOrUpdateProjectByDto(projectDto);
+        return projectService.createProject(projectDto);
     }
 
     @GetMapping(path = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})

@@ -55,6 +55,7 @@ export class ProjectComponent implements OnInit {
     private utilService:UtilService) { }
 
   ngOnInit() {
+    this.utilService.showSpinner();
     this.checkSubscriptionData();
     this.route.paramMap.subscribe(params => {
       console.log(params.get('id'));
@@ -88,61 +89,107 @@ export class ProjectComponent implements OnInit {
           console.log("loadProject Case");
           if(this.gotUserData && this.gotTeamData && this.gotStageData && this.gotTaskData) {
             this.showProject = true;
+            this.utilService.hideSpinner();
           }
       }
     });
   }
 
   loadProjectDetails(projectId:string) {
+    this.gotUserData = false;
+    this.gotTeamData = false;
+    this.gotStageData = false;
+    this.gotTaskData = false;
     this.projectService.fetchProjectById(projectId)
     .subscribe((project:Project) => {
-      console.log("project", project);
-      this.projectData = project;
-      this.utilService.currProject = project.id;
-      this.gotSubscriptionData$.emit(new EmitAction("loadProject", true));
-      this.projectService.fetchUserById(project.ownerId).subscribe(
-        (user) => {
-          console.log(user);
-          this.projectOwner = user;
-          this.gotUserData = true;
-          this.gotSubscriptionData$.emit(new EmitAction("loadProject", true));
-      });
-      this.projectService.fetchTeamsByProjectIds(new Array<string>(projectId))
-        .subscribe((teams:Array<Team>) => {
-          console.log(teams);
-          this.projectTeams = teams;
-          this.projectTeams.forEach((team:Team) => {
-            team["taskCount"] = "-NA-";
-            this.projectService.fetchTasksCountByTeamId(team.id)
-            .subscribe((c:number) => {
-              team["taskCount"] = c;
+      try {
+        console.log("project", project);
+        this.projectData = project;
+        this.utilService.currProject = project.id;
+        this.gotSubscriptionData$.emit(new EmitAction("loadProject", true));
+
+        // fetch project owner details
+        this.projectService.fetchUserById(project.ownerId).subscribe(
+          (user) => {
+            console.log(user);
+            this.projectOwner = user;
+            this.gotUserData = true;
+            this.gotSubscriptionData$.emit(new EmitAction("loadProject", true));
+        }, (err) => {
+          throw err;
+        });
+
+        // fetch all teams of the project
+        this.projectService.fetchTeamsByProjectIds(new Array<string>(projectId))
+          .subscribe((teams:Array<Team>) => {
+            console.log(teams);
+            this.projectTeams = teams;
+
+            // fetch task count for each team
+            this.projectTeams.forEach((team:Team) => {
+              team["taskCount"] = "-NA-";
+              this.projectService.fetchTasksCountByTeamId(team.id)
+              .subscribe((c:number) => {
+                team["taskCount"] = c;
+              }, (err) => {
+                throw err;
+              });
             });
+
+            this.gotTeamData = true;
+            this.gotSubscriptionData$.emit(new EmitAction("loadProject", true));
+          }, (err) => {
+            throw err;
           });
-          this.gotTeamData = true;
-          this.gotSubscriptionData$.emit(new EmitAction("loadProject", true));
-        });
-        this.projectService.fetchStagesByProjectIds(new Array<string>(projectId))
-        .subscribe((stages:Array<Stage>) => {
-          console.log(stages);
-          this.projectStages = stages;
-          this.projectStages.forEach((stage:Stage) => {
-            stage["taskCount"] = "-NA-";
-            this.projectService.fetchTasksCountByStageId(stage.id)
-            .subscribe((c:number) => {
-              stage["taskCount"] = c;
+
+          // fetch all stages of the project
+          this.projectService.fetchStagesByProjectIds(new Array<string>(projectId))
+          .subscribe((stages:Array<Stage>) => {
+            console.log(stages);
+            this.projectStages = stages;
+
+            // fetch task count for each stage
+            this.projectStages.forEach((stage:Stage) => {
+              stage["taskCount"] = "-NA-";
+              this.projectService.fetchTasksCountByStageId(stage.id)
+              .subscribe((c:number) => {
+                stage["taskCount"] = c;
+              }, (err) => {
+                throw err;
+              });
             });
+
+            this.gotStageData = true;
+            this.gotSubscriptionData$.emit(new EmitAction("loadProject", true));
+          }, (err) => {
+            throw err;
           });
-          this.gotStageData = true;
-          this.gotSubscriptionData$.emit(new EmitAction("loadProject", true));
-        });
-        this.projectService.fetchTasksCountByProjectId(projectId)
-        .subscribe((taskCount:number) => {
-          console.log("totalTaskCount", taskCount);
-          this.projectTotalTaskCount = taskCount;
-          this.gotTaskData = true;
-          this.gotSubscriptionData$.emit(new EmitAction("loadProject", true));
-        });
+
+          // fetch total task count of the project
+          this.projectService.fetchTasksCountByProjectId(projectId)
+          .subscribe((taskCount:number) => {
+            console.log("totalTaskCount", taskCount);
+            this.projectTotalTaskCount = taskCount;
+            this.gotTaskData = true;
+            this.gotSubscriptionData$.emit(new EmitAction("loadProject", true));
+          }, (err) => {
+            throw err;
+          });
+
+          // throwing dummy error to test catch block
+          //throw new Error("Dummy error");
+
+      } catch (error) {
+        // any error while fetching all required data like owner, teams, stages, task counts
+        this.modal.body = "Some error occured.. Please try again later..!!";
+        this.showModal(this.modal);
+        setTimeout(() => {
+          this.navigateToProjectList();
+          this.hideModal(this.modal);
+        }, 5000);
+      }
     }, (err) => {
+      // error fetching project data
       console.log(err);
       this.navigateToProjectList();
     });
@@ -163,6 +210,7 @@ export class ProjectComponent implements OnInit {
   }
 
   saveEdit(prop:string) {
+    this.utilService.showSpinner();
     let isProp:string = this.getIsProp(prop);
     let newProp:string = this.getNewProp(prop);
     this.edit[isProp] = false;
@@ -183,18 +231,21 @@ export class ProjectComponent implements OnInit {
             setTimeout(() => {
               this.edit.isSaving = false;
               this.edit.currProp = undefined;
+              this.utilService.hideSpinner();
             }, 5000);
         });
       } else {
         setTimeout(() => {
           this.edit.isSaving = false;
           this.edit.currProp = undefined;
+          this.utilService.hideSpinner();
         }, 5000);
       }
     }, (err) => {
       this.edit.isSaving = false;
       this.edit.currProp = undefined;
       this.modal.body = "Unable to edit the " + prop + "!! Please try again..";
+      this.utilService.hideSpinner();
       this.showModal(this.modal);
     });
   }
@@ -225,6 +276,7 @@ export class ProjectComponent implements OnInit {
 
   saveStage(name:string) {
     if(name && name.trim().length > 0) {
+      this.utilService.showSpinner();
       this.isAddingStage = true;
       //let stage:Stage = this.projectStages[this.projectStages.length - 1];
       let stage:Stage = new Stage();
@@ -237,11 +289,13 @@ export class ProjectComponent implements OnInit {
           this.projectStages.push(stage);
           this.isAddingStage = false;
           this.isAddStage = false;
+          this.utilService.hideSpinner();
         }, 5000);
       }, (err) => {
           this.isAddingStage = false;
           this.isAddStage = false;
           this.modal.body = "Unable to add new Stage!! Please try again..";
+          this.utilService.hideSpinner();
           this.showModal(this.modal);
       });
     } else {
@@ -253,6 +307,7 @@ export class ProjectComponent implements OnInit {
   }
 
   removeStage(stage:Stage, index:number) {
+    this.utilService.showSpinner();
     console.log("index", index);
     this.isRemovingStage = true;
     this.currStage = stage;
@@ -264,11 +319,13 @@ export class ProjectComponent implements OnInit {
           console.log("removed stage", this.projectStages);
           this.currStage = new Stage();
           this.isRemovingStage = false;
+          this.utilService.hideSpinner();
         }, 5000);
     }, (err) => {
       this.isRemovingStage = false;
       this.currStage = new Stage();
       this.modal.body = "Unable to remove the stage '" + stage.name + "', Please try again!!!";
+      this.utilService.hideSpinner();
       this.showModal(this.modal);
     });
   }
@@ -288,6 +345,7 @@ export class ProjectComponent implements OnInit {
 
   saveRenameStage(name:string) {
     if(name && name.trim().length > 0) {
+      this.utilService.showSpinner();
       this.isRenamingStage = true;
       let rStage:Stage = new Stage();
       rStage.id = this.currStage.id;
@@ -301,12 +359,14 @@ export class ProjectComponent implements OnInit {
           this.isRenamingStage = false;
           this.isRenameStage = false;
           this.newStage = "";
+          this.utilService.hideSpinner();
         }, 5000);
       }, (err) => {
           this.isRenamingStage = false;
           this.isRenameStage = false;
           this.newStage = "";
           this.modal.body = "Unable to rename Stage!! Please try again..";
+          this.utilService.hideSpinner();
           this.showModal(this.modal);
       });
     } else {
@@ -329,6 +389,7 @@ export class ProjectComponent implements OnInit {
 
   saveTeam(name:string) {
     if(name && name.trim().length > 0) {
+      this.utilService.showSpinner();
       this.isAddingTeam = true;
       //let team:Team = this.projectTeams[this.projectTeams.length - 1];
       let team:Team = new Team();
@@ -341,11 +402,13 @@ export class ProjectComponent implements OnInit {
           this.projectTeams.push(team);
           this.isAddingTeam = false;
           this.isAddTeam = false;
+          this.utilService.hideSpinner();
         }, 5000);
       }, (err) => {
           this.isAddingTeam = false;
           this.isAddTeam = false;
           this.modal.body = "Unable to add new Team!! Please try again..";
+          this.utilService.hideSpinner();
           this.showModal(this.modal);
       });
     } else {
@@ -358,6 +421,7 @@ export class ProjectComponent implements OnInit {
 
   removeTeam(team:Team, index:number) {
     console.log("index", index);
+    this.utilService.showSpinner();
     this.isRemovingTeam = true;
     this.currTeam = team;
     this.projectService.removeTeam(team.id)
@@ -368,11 +432,13 @@ export class ProjectComponent implements OnInit {
           console.log("removed team", this.projectTeams);
           this.currTeam = new Team();
           this.isRemovingTeam = false;
+          this.utilService.hideSpinner();
         }, 5000);
     }, (err) => {
       this.isRemovingTeam = false;
       this.currTeam = new Team();
       this.modal.body = "Unable to remove the team '" + team.name + "', Please try again!!!";
+      this.utilService.hideSpinner();
       this.showModal(this.modal);
     });
   }
@@ -392,6 +458,7 @@ export class ProjectComponent implements OnInit {
 
   saveRenameTeam(name:string) {
     if(name && name.trim().length > 0) {
+      this.utilService.showSpinner();
       this.isRenamingTeam = true;
       let rTeam:Team = new Team();
       rTeam.id = this.currTeam.id;
@@ -405,12 +472,14 @@ export class ProjectComponent implements OnInit {
           this.isRenamingTeam = false;
           this.isRenameTeam = false;
           this.newTeam = "";
+          this.utilService.hideSpinner();
         }, 5000);
       }, (err) => {
           this.isRenamingTeam = false;
           this.isRenameTeam = false;
           this.newTeam = "";
           this.modal.body = "Unable to rename Team!! Please try again..";
+          this.utilService.hideSpinner();
           this.showModal(this.modal);
       });
     } else {

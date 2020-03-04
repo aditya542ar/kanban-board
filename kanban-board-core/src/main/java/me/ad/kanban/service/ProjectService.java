@@ -14,7 +14,8 @@ public interface ProjectService {
     ProjectDto findProjectById(String id);
     List<ProjectDto> findAllProjectsWithFilterQuery(Optional<ProjectGetAllQueryDto> queryDtoOpt);
     Long findTotalCount(Optional<ProjectGetAllQueryDto> queryDtoOpt);
-    ProjectDto saveOrUpdateProjectByDto(ProjectDto projectDto);
+    ProjectDto createProject(ProjectDto projectDto);
+//    ProjectDto saveOrUpdateProjectByDto(ProjectDto projectDto);
     Set<TeamDto> findTeamsByProjectId(String projectId);
     Set<UserDto> findUsersByProjectId(String projectId);
     Set<StageDto> findStagesByProjectId(String projectId);

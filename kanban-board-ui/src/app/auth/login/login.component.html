@@ -1,3 +1,12 @@
+<div class="row">
+  <div class="col-md-1"></div>
+  <div class="col-md-10">
+    <div class="alert alert-danger" *ngIf="isLoginFailed">
+      <strong>Oppsss..!!</strong> {{failMessage}}
+    </div>
+  </div>
+  <div class="col-md-1"></div>
+</div>
 <div class="row d-flex justify-content-around">
   <form name="loginForm" class="col-md-6">
     <div class="card">

@@ -1,0 +1,113 @@
+<div class="row" *ngIf="showUserDetail">
+  <div class="col-md-8 mb-3">
+    <h2>
+      <i class="fa fa-info-circle"></i> 
+      <span> Details of {{user.userId}} </span>
+    </h2>
+  </div>
+  <div class="col-md-4 pt-2 pl-0 text-right">
+    <button type="button" class="btn btn-primary mr-2"
+      *ngIf="!(isEdit || isChangePassword)"
+      (click)="startEdit()">
+      <i class="fa fa-pencil"></i> Edit
+    </button>
+    <button type="button" class="btn btn-success"
+      *ngIf="!(isEdit || isChangePassword)"
+      (click)="startChangePassword()">
+      <i class="fa fa-pencil"></i> Change Password
+    </button>
+  </div>
+  <div class="col-md-2"></div>
+  <div class="col-md-8">
+    <div class="card mb-3 pb-1">
+      <div class="card-header p-0">
+        <!-- empty header -->
+      </div>
+      <div class="card-body px-2 py-1" *ngIf="!(isEdit || isChangePassword)">
+        <div class="float-left">
+          <img src="{{user.profilePic}}" class="rounded float-left img-thumbnail profile-pic" 
+          alt="Profile Pic of {{user.userId}}" />
+          <!-- <div class="form-group">
+            <label for="newProfilePic">Upload Profile Pic</label>
+            <input type="file" class="form-control-file" id="newProfilePic" [(ngModel)]="newProfilePic">
+          </div> -->
+        </div>
+        <div class="float-left ml-3" style="width: calc(100% - 140px);">
+          <div class="form-group">
+            <label for="firstName"><strong>First Name:</strong></label>
+            <span class="form-control">{{user.firstName}}</span>
+          </div>
+          <div class="form-group">
+            <label for="lastName"><strong>Last Name:</strong></label>
+            <div class="form-control">{{user.lastName}}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- body for edit user -->
+      <div class="card-body px-2 py-1" *ngIf="isEdit">
+        <div class="form-group">
+          <label for="firstName"><strong>First Name:</strong></label>
+          <input type="text" class="form-control" name="newFirstName" 
+          [(ngModel)]="newFirstName"
+          (keyup)="validateFirstName()" />
+          <small class="form-text" *ngIf="invalidFirstName" style="color: red;">
+            Invalid First Name..!! Length must be between 2 to 20 & 
+            should only contain alphabets and space
+          </small>
+        </div>
+        <div class="form-group">
+          <label for="lastName"><strong>Last Name:</strong></label>
+          <input type="text" class="form-control" name="newLastName" 
+          [(ngModel)]="newLastName"
+          (keyup)="validateLastName()" />
+          <small class="form-text" *ngIf="invalidLastName" style="color: red;">
+            Invalid Last Name..!! Length must be between 2 to 20 & 
+            should only contain alphabets and space
+          </small>
+        </div>
+        <div class="form-group">
+          <label for="newProfilePic">Upload Profile Pic</label>
+          <input type="file" class="form-control-file" id="newProfilePic" 
+          [(ngModel)]="newProfilePic"
+          (change)="onFileChange($event)" />
+        </div>
+      </div>
+
+      <!--  body for change password -->
+      <div class="card-body px-2 py-1" *ngIf="isChangePassword">
+        <div class="form-group">
+          <label for="password"><strong>New Password:</strong></label>
+          <input type="password" class="form-control" name="newPassword" 
+          [(ngModel)]="newPassword"
+          (keyup)="validatePassword()" />
+          <p style="white-space: pre-wrap;margin: 0;"><small class="form-text" style="min-width: 100%; display: block;" *ngIf="invalidPassword" style="color: red;">
+            Invalid Password..!! Length must be between 4 to 100 characters
+          </small></p>
+        </div>
+        <div class="form-group">
+          <label for="confirmPassword"><strong>Confirm Password:</strong></label>
+          <input type="password" class="form-control" name="confirmPassword" 
+          [(ngModel)]="confirmPassword"
+          (keyup)="validateConfirmPassword()" />
+          <small class="form-text" *ngIf="mismatchPassword" style="color: red;">
+            Invalid Confirm Password..!! Confirm password must match with password
+          </small>
+        </div>
+      </div>
+
+      <div class="modal-footer p-0" *ngIf="isEdit || isChangePassword">
+        <button type="button" class="btn btn-danger" 
+        data-dismiss="modal"
+        *ngIf="validateForm()"
+        (click)="saveChange()">Save</button>
+
+        <button type="button" class="btn btn-success" 
+        data-dismiss="modal"
+        (click)="cancelChange()">Close</button>
+      </div>
+
+    </div>
+  </div>
+  <div class="col-md-2"></div>
+</div>

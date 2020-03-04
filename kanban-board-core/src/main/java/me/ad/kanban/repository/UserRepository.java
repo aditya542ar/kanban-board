@@ -4,6 +4,9 @@ import me.ad.kanban.entity.User;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -14,6 +17,16 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, String>, JpaSpecificationExecutor<User> {
 
     Optional<User> findByUserId(String userId);
+
+    @Modifying
+    @Query("UPDATE User u SET u.firstName = :firstName, u.lastName = :lastName, u.profilePic = :profilePic WHERE u.id = :id")
+    void updateUserDetail(@Param("id") String id, @Param("firstName") String firstName,
+                          @Param("lastName") String lastName,
+                          @Param("profilePic") byte[] profilePic);
+
+    @Modifying
+    @Query("UPDATE User u SET u.password = :password WHERE u.id = :id")
+    void updatePassword(@Param("id") String id, @Param("password") String password);
 
     static Specification<User> idSpec(String id) {
         return (userRoot, cq, cb) -> cb.equal(userRoot.get("id"), id);

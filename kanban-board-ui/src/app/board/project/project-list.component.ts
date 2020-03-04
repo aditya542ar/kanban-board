@@ -62,6 +62,7 @@ export class ProjectListComponent implements OnInit {
     private utilService:UtilService) { }
 
   ngOnInit() {
+    this.utilService.showSpinner();
     this.checkSubscriptionData();
     this.utilService.hideProjectDropDown();
     this.utilService.currPage = "projectList";
@@ -73,6 +74,9 @@ export class ProjectListComponent implements OnInit {
   }
 
   loadAllProjects(user?:User):void {
+    this.gotUserData = false;
+    this.gotTeamData = false;
+    this.gotStageData = false;
     if(!user) user = this.utilService.getLoggedInUser();
     this.projectService.fetchAllProjectsByUserId(user).subscribe(
       (res) => {
@@ -131,7 +135,10 @@ export class ProjectListComponent implements OnInit {
           if(this.gotUserData && this.gotTeamData && this.gotStageData 
             // && this.gotTaskData
             ) {
-            this.showAllProjects = true;
+              setTimeout(() => {
+                this.showAllProjects = true;
+                this.utilService.hideSpinner();
+              }, 3000);
           }
       }
     });
@@ -171,6 +178,7 @@ export class ProjectListComponent implements OnInit {
   }
 
   createNewProject() {
+    this.utilService.showSpinner();
     this.createProjectSuccess = false;
     this.createProjectFail = false;
     let valid = this.validateProjectData();
@@ -187,14 +195,20 @@ export class ProjectListComponent implements OnInit {
           this.loadAllProjects();
           setTimeout(() => {
             this.cancelCreateProject();
+            this.utilService.hideSpinner();
           }, 2000);
         }, 
         (err) => {
           this.createProjectFail = true;
+          console.log(err);
+          if(err.status === 400)
+            this.popupMsg = err.error.message;
+          else 
           this.popupMsg = "Unable to create new Project '" + this.newProject.name 
-                + "'.\n Please try again with correct data.";
+                 + "'.\n Please try again with correct data.";
           this.creatingNewProject = false;
           this.modalBodyDiv.nativeElement.scrollTo(0, 0);
+          this.utilService.hideSpinner();
         }
       );
     } else {
@@ -203,6 +217,7 @@ export class ProjectListComponent implements OnInit {
       this.creatingNewProject = false;
       //console.log(this.modalBodyDiv.nativeElement);
       this.modalBodyDiv.nativeElement.scrollTo(0, 0);
+      this.utilService.hideSpinner();
     }
   }
 

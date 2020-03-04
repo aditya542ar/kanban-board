@@ -18,6 +18,7 @@ import { BasicAuthHttpInterceptorService } from './auth/basic-auth-http-intercep
 import { AuthService } from './auth/auth.service';
 import { RegisterComponent } from './auth/register/register.component';
 import { TeamComponent } from './board/team/team.component';
+import { ProfileComponent } from './auth/profile/profile.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { TeamComponent } from './board/team/team.component';
     TaskSortPipe,
     LoginComponent,
     RegisterComponent,
-    TeamComponent
+    TeamComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,

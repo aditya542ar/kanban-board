@@ -13,14 +13,19 @@ export class LoginComponent implements OnInit {
 
   username:string;
   password:string;
+  isLoginFailed:boolean = false;
+  failMessage:string = "";
   constructor(private authService:AuthService, private util:UtilService, private router:Router) { }
 
   ngOnInit() {
     this.util.hideProjectDropDown();
     this.util.currPage = "login";
+    this.util.hideSpinner();
   }
 
   doLogin() {
+    this.util.showSpinner();
+    this.isLoginFailed = false;
     this.authService.authenticateUser(this.username, this.password).subscribe(
       (res:any) => {
         this.authService.doLogin(this.username, res.jwtToken);
@@ -29,12 +34,22 @@ export class LoginComponent implements OnInit {
             this.util.setLoggedInUser(user[0]);
             // this.navigateToDashBoard();
             this.navigateToProjectList();
+            this.util.hideSpinner();
           }, (err) => {
-            console.log("Error fetching logged in User details..!!");
+            console.log("Error fetching logged in User details..!!", err);
+            this.failMessage = "Error fetching logged in user details... Please try again later..!!";
+            this.isLoginFailed = true;
+            this.util.hideSpinner();
           }
         );
       }, (err) => {
-        console.log("Invalid login..!!!");
+        console.log("Invalid login..!!!", err);
+        if(err.status === 400)
+          this.failMessage = err.error.message;
+        else
+          this.failMessage = "Some error occured.. Please try again later..!!";
+        this.isLoginFailed = true;
+        this.util.hideSpinner();
       }
     )
   }

@@ -5,7 +5,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "message")
 public class CustomMessageProperties {
     private String projectNotExist;
+    private String projectAlreadyExist;
     private String userNotExist;
+    private String userAlreadyExist;
     private String teamNotExist;
     private String stageNotExist;
     private String taskNotExist;
@@ -25,12 +27,28 @@ public class CustomMessageProperties {
         this.projectNotExist = projectNotExist;
     }
 
+    public String getProjectAlreadyExist() {
+        return projectAlreadyExist;
+    }
+
+    public void setProjectAlreadyExist(String projectAlreadyExist) {
+        this.projectAlreadyExist = projectAlreadyExist;
+    }
+
     public String getUserNotExist() {
         return userNotExist;
     }
 
     public void setUserNotExist(String userNotExist) {
         this.userNotExist = userNotExist;
+    }
+
+    public String getUserAlreadyExist() {
+        return userAlreadyExist;
+    }
+
+    public void setUserAlreadyExist(String userAlreadyExist) {
+        this.userAlreadyExist = userAlreadyExist;
     }
 
     public String getTeamNotExist() {

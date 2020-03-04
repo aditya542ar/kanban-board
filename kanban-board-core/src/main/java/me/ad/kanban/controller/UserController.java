@@ -64,7 +64,7 @@ public class UserController {
     public UserDto createUser(@RequestBody UserDto userDto) {
         if(userDto != null && userDto.getProfilePic() == null)
             userDto.setProfilePic(DEFAULT_PROFILE_PIC);
-        return userService.saveOrUpdateUserByDto(userDto);
+        return userService.createUserByDto(userDto);
     }
 
     @GetMapping(path = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -92,11 +92,10 @@ public class UserController {
         return userService.findTasksByUserId(id);
     }
 
-    @PutMapping(path = "/{id}/update", consumes = {MediaType.APPLICATION_JSON_VALUE},
-            produces = {MediaType.APPLICATION_JSON_VALUE})
-    public UserDto updateUser(@PathVariable("id") String id, @RequestBody UserDto userDto, Authentication auth) {
+    @PutMapping(path = "/{id}/update", consumes = {MediaType.APPLICATION_JSON_VALUE})
+    public void updateUser(@PathVariable("id") String id, @RequestBody UserDto userDto, Authentication auth) {
         authorizationService.ensureAuthUserIsConcernedUser(auth, id);
-        return userService.updateUserById(id, userDto);
+        userService.updateUserById(id, userDto);
     }
 
     @DeleteMapping(path = "/{id}")
