@@ -1,0 +1,11 @@
+# Spring Properties
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+
+  datasource:
+    url: "jdbc:h2:mem:kanban-db;DB_CLOSE_ON_EXIT=false"
+    username: admin
+    password: admin123
+    driverClassName: org.h2.Driver
